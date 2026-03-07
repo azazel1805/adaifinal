@@ -1,10 +1,10 @@
 import store from '../store/index';
 
 const MENU_STRUCTURE = [
-  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'dashboard', label: 'Ana Sayfa' },
   {
     id: 'yds_ydt',
-    label: 'Expert Analytics',
+    label: 'Uzman Analizleri',
     items: [
       { id: 'deconstruction', label: 'Metin Deşifresi' },
       { id: 'diagrammer', label: 'Cümle Görselleştirici' },
@@ -17,7 +17,7 @@ const MENU_STRUCTURE = [
   },
   {
     id: 'gen_english',
-    label: 'Linguistic Core',
+    label: 'Dil Çekirdeği',
     items: [
       { id: 'grammar_library', label: 'Gramer Kütüphanesi' },
       { id: 'basics', label: 'Temel Yapılar' },
@@ -31,7 +31,7 @@ const MENU_STRUCTURE = [
   },
   {
     id: 'ai_tools',
-    label: 'Cognitive Lab',
+    label: 'Bilişsel Lab',
     items: [
       { id: 'tutor', label: 'AI Tutor' },
       { id: 'placement_test', label: 'Seviye Tespit' },
@@ -43,7 +43,7 @@ const MENU_STRUCTURE = [
   },
   {
     id: 'games',
-    label: 'Games',
+    label: 'Oyunlar',
     items: [
       { id: 'crossword', label: 'Bulmaca' },
       { id: 'hangman', label: 'Adam Asmaca' },
@@ -53,15 +53,15 @@ const MENU_STRUCTURE = [
   },
   {
     id: 'community',
-    label: 'Community',
+    label: 'Topluluk',
     items: [
-      { id: 'word_duel', label: 'Word Duel' },
-      { id: 'global_chat', label: 'Global Chat' }
+      { id: 'word_duel', label: 'Kelime Düellosu' },
+      { id: 'global_chat', label: 'Küresel Sohbet' }
     ]
   },
   {
     id: 'profile',
-    label: 'Profile',
+    label: 'Profil',
     items: [
       { id: 'profile', label: 'Genel Profil' },
       { id: 'skill_tree', label: 'Yetenek Ağacı' },
@@ -149,7 +149,7 @@ export function renderNavbar() {
       <!-- Mobile Menu Overlay -->
       <div id="mobile-menu" class="hidden fixed inset-0 z-[60] bg-white p-6 animate-fadeIn">
          <div class="flex justify-between items-center mb-8">
-            <span class="text-xl font-black">MENU</span>
+            <span class="text-xl font-black">MENÜ</span>
             <button id="close-mobile-menu" class="p-2 text-zinc-500">
                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
