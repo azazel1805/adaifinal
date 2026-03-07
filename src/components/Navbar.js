@@ -1,0 +1,187 @@
+import store from '../store/index';
+
+const MENU_STRUCTURE = [
+  { id: 'dashboard', label: 'Dashboard' },
+  {
+    id: 'yds_ydt',
+    label: 'Expert Analytics',
+    items: [
+      { id: 'deconstruction', label: 'Metin Deşifresi' },
+      { id: 'diagrammer', label: 'Cümle Görselleştirici' },
+      { id: 'analyzer', label: 'Metin Analizci' },
+      { id: 'reading', label: 'Okuma Analizi' },
+      { id: 'translation_analyst', label: 'Çeviri Analizci' },
+      { id: 'pragmatic_analyzer', label: 'Pragmatik Analizci' },
+      { id: 'cohesion_analyzer', label: 'Bağlam Analizci' }
+    ]
+  },
+  {
+    id: 'gen_english',
+    label: 'Linguistic Core',
+    items: [
+      { id: 'grammar_library', label: 'Gramer Kütüphanesi' },
+      { id: 'basics', label: 'Temel Yapılar' },
+      { id: 'tenses', label: 'Zamanlar' },
+      { id: 'vocabulary', label: 'Kelime Antrenörü' },
+      { id: 'dictionary', label: 'Sözlük' },
+      { id: 'writing', label: 'Yazma Pratiği' },
+      { id: 'listening', label: 'Dinleme Pratiği' }
+    ]
+  },
+  {
+    id: 'ai_tools',
+    label: 'Cognitive Lab',
+    items: [
+      { id: 'tutor', label: 'AI Tutor' },
+      { id: 'placement_test', label: 'Seviye Tespit' },
+      { id: 'podcast_maker', label: 'Podcast Oluşturucu' },
+      { id: 'essay_outliner', label: 'Essay Taslak' },
+      { id: 'speaking_simulator', label: 'Konuşma Simülatörü' },
+      { id: 'shadowing_lab', label: 'Shadowing Lab' }
+    ]
+  },
+  {
+    id: 'games',
+    label: 'Games',
+    items: [
+      { id: 'crossword', label: 'Bulmaca' },
+      { id: 'hangman', label: 'Adam Asmaca' },
+      { id: 'word_sprint', label: 'Kelime Koşusu' },
+      { id: 'concept_weaver', label: 'Kavram Örücü' }
+    ]
+  },
+  {
+    id: 'community',
+    label: 'Community',
+    items: [
+      { id: 'word_duel', label: 'Word Duel' },
+      { id: 'global_chat', label: 'Global Chat' }
+    ]
+  },
+  {
+    id: 'profile',
+    label: 'Profile',
+    items: [
+      { id: 'profile', label: 'Genel Profil' },
+      { id: 'skill_tree', label: 'Yetenek Ağacı' },
+      { id: 'planner', label: 'Çalışma Planı' },
+      { id: 'history', label: 'Geçmiş' },
+      { id: 'admin', label: 'Yönetim' }
+    ]
+  }
+];
+
+export function renderNavbar() {
+  const nav = document.createElement('nav');
+  nav.className = 'bg-white border-b border-zinc-200 sticky top-0 z-50 w-full shadow-sm';
+
+  function update() {
+    const activeTab = store.getState().activeTab;
+
+    nav.innerHTML = `
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20">
+          <div class="flex items-center gap-8">
+            <!-- Logo area -->
+            <div class="flex flex-col cursor-pointer" onclick="window.location.hash='dashboard'">
+              <span class="text-2xl font-black tracking-tighter text-zinc-900">ADA<span class="text-brand-primary">I</span></span>
+              <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-[0.3em] -mt-1">Encyclopedia V3.0</span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-6 h-full">
+              ${MENU_STRUCTURE.map(group => {
+      if (!group.items) {
+        const isActive = activeTab === group.id;
+        return `
+                    <a href="#${group.id}" class="h-full flex items-center px-1 border-b-2 text-sm font-bold uppercase tracking-wider transition-all
+                      ${isActive ? 'border-brand-primary text-zinc-900' : 'border-transparent text-zinc-500 hover:text-zinc-800 hover:border-zinc-300'}">
+                      ${group.label}
+                    </a>
+                  `;
+      }
+
+      const hasActiveChild = group.items.some(i => i.id === activeTab);
+      return `
+                  <div class="relative group h-full flex items-center">
+                    <button class="h-full flex items-center gap-1.5 px-1 border-b-2 text-sm font-bold uppercase tracking-wider transition-all
+                      ${hasActiveChild ? 'border-brand-primary text-zinc-900' : 'border-transparent text-zinc-500 hover:text-zinc-800 hover:border-zinc-300'}">
+                      ${group.label}
+                      <svg class="w-4 h-4 opacity-50 group-hover:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </button>
+                    
+                    <!-- Dropdown -->
+                    <div class="absolute top-full left-0 w-64 bg-white border border-zinc-100 shadow-2xl rounded-2xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all z-50">
+                      ${group.items.map(item => `
+                        <a href="#${item.id}" class="flex items-center px-4 py-3 rounded-xl text-sm font-semibold transition-all
+                          ${activeTab === item.id ? 'bg-zinc-50 text-brand-primary' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'}">
+                          ${item.label}
+                        </a>
+                      `).join('')}
+                    </div>
+                  </div>
+                `;
+    }).join('')}
+            </div>
+          </div>
+
+          <!-- Right side -->
+          <div class="flex items-center gap-4">
+             <div class="hidden sm:flex flex-col items-end mr-2 cursor-pointer" onclick="window.location.hash='profile'">
+                <span class="text-xs font-bold text-zinc-900">${store.getState().user?.displayName || 'Guest'}</span>
+                <span class="text-[10px] text-zinc-400">${store.getState().user?.email || ''}</span>
+             </div>
+             <div onclick="window.location.hash='profile'" class="w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden cursor-pointer hover:ring-2 hover:ring-brand-primary transition-all">
+                <img src="${store.getState().user?.photoURL || `https://ui-avatars.com/api/?name=${store.getState().user?.displayName || 'G'}&background=f4f4f5&color=71717a`}" class="w-full h-full object-cover">
+             </div>
+             
+             <!-- Mobile Menu Toggle (Simplified) -->
+             <button id="mobile-menu-toggle" class="md:hidden p-2 text-zinc-500">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+             </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mobile Menu Overlay -->
+      <div id="mobile-menu" class="hidden fixed inset-0 z-[60] bg-white p-6 animate-fadeIn">
+         <div class="flex justify-between items-center mb-8">
+            <span class="text-xl font-black">MENU</span>
+            <button id="close-mobile-menu" class="p-2 text-zinc-500">
+               <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+         </div>
+         <div class="space-y-4 overflow-y-auto max-h-[80vh]">
+            ${MENU_STRUCTURE.map(group => {
+      if (!group.items) return `<a href="#${group.id}" class="block text-lg font-bold py-2 border-b border-zinc-50">${group.label}</a>`;
+      return `
+                <div class="space-y-2">
+                   <h3 class="text-xs font-black text-zinc-400 uppercase tracking-widest pt-4">${group.label}</h3>
+                   <div class="grid grid-cols-2 gap-2">
+                      ${group.items.map(i => `<a href="#${i.id}" class="text-sm font-bold p-3 bg-zinc-50 rounded-xl">${i.label}</a>`).join('')}
+                   </div>
+                </div>
+              `;
+    }).join('')}
+         </div>
+      </div>
+    `;
+
+    // Re-attach mobile menu events
+    nav.querySelector('#mobile-menu-toggle')?.addEventListener('click', () => {
+      nav.querySelector('#mobile-menu').classList.remove('hidden');
+    });
+    nav.querySelector('#close-mobile-menu')?.addEventListener('click', () => {
+      nav.querySelector('#mobile-menu').classList.add('hidden');
+    });
+    nav.querySelectorAll('#mobile-menu a').forEach(a => {
+      a.addEventListener('click', () => nav.querySelector('#mobile-menu').classList.add('hidden'));
+    });
+  }
+
+  store.subscribe(update);
+  update();
+  return nav;
+}

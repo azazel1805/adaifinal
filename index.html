@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/public/adai-favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="ADAI – Yapay Zeka Destekli İngilizce Öğrenme Platformu" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/public/manifest.json" />
+  <meta name="theme-color" content="#09090b" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="ADAI">
+
+  <title>ADAI · AI English Platform</title>
+
+  <style>
+    /* Critical inline styles applied before JS loads */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background: #f4f4f5;
+      color: #09090b;
+    }
+
+    #root {
+      height: 100%;
+    }
+
+    /* Brand glow – red accent */
+    .special-glow {
+      color: #e11d48;
+      text-shadow: 0 0 12px rgba(225, 29, 72, 0.6), 0 0 24px rgba(225, 29, 72, 0.3);
+    }
+
+    /* Slide-in animation for mobile drawer */
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-100%);
+      }
+
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .animate-slide-in-left {
+      animation: slideInLeft 0.26s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    /* Fade for backdrop */
+    @keyframes fadeInBg {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeInBg 0.2s ease-out both;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
