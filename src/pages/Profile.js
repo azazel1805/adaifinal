@@ -1,6 +1,7 @@
 import store from '../store/index';
 import { allAchievements } from '../achievements';
 import { acceptFriendRequest, rejectFriendRequest } from '../services/socialService';
+import { logout } from '../store/auth';
 
 export const renderProfile = () => {
     const container = document.createElement('div');
@@ -176,6 +177,9 @@ export const renderProfile = () => {
                         <button id="reset-data-btn" class="w-full text-left p-6 bg-red-500/5 hover:bg-red-500/10 rounded-2xl font-bold text-sm text-red-500 transition-all flex items-center justify-between">
                             Tüm Verileri Sıfırla <span>🔥</span>
                         </button>
+                        <button id="logout-btn" class="w-full text-left p-6 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 rounded-2xl font-bold text-sm text-slate-600 dark:text-slate-400 transition-all flex items-center justify-between">
+                            Çıkış Yap <span>🚪</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -224,6 +228,13 @@ export const renderProfile = () => {
             if (confirm('DİKKAT! Tüm çalışma verileriniz ve başarımlarınız kalıcı olarak silinecek. Emin misiniz?')) {
                 localStorage.clear();
                 window.location.reload();
+            }
+        });
+
+        container.querySelector('#logout-btn')?.addEventListener('click', async () => {
+            if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
+                await logout();
+                window.location.hash = 'login';
             }
         });
 

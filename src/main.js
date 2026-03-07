@@ -44,8 +44,11 @@ import { renderProfile } from './pages/Profile';
 import { renderGlobalChat } from './pages/GlobalChat';
 import { renderShadowingLab } from './pages/ShadowingLab';
 import { renderWordDuel } from './pages/WordDuel';
+import { renderLoginPage } from './pages/LoginPage';
+import { renderSignUpPage } from './pages/SignUpPage';
 import { initPerformanceStats } from './utils/performance';
 import { listenToFriendships, listenToPendingRequests } from './services/socialService';
+import { initAuth } from './store/auth';
 
 import { initHistory } from './store/history';
 import { initChallenge } from './store/challenge';
@@ -91,19 +94,8 @@ const PAGE_TITLES = {
     admin: 'Yönetim | ADAI',
 };
 
-// ─── Init (bypass auth) ───────────────────────────────────────────
-const savedName = localStorage.getItem('adai_user_name') || 'Guest';
-const savedPhoto = localStorage.getItem('adai_user_photo') || null;
-let guestUid = localStorage.getItem('adai_user_id');
-if (!guestUid) {
-    guestUid = 'guest_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('adai_user_id', guestUid);
-}
-store.setState({
-    user: { uid: guestUid, email: `${guestUid}@adai.ai`, displayName: savedName, photoURL: savedPhoto },
-    loading: false,
-});
-
+// ─── Init ─────────────────────────────────────────────────────────
+initAuth();
 initHistory();
 initChallenge();
 initPdfExam();
@@ -142,6 +134,7 @@ const routes = [
     { path: 'translation_analyst' }, { path: 'pragmatic_analyzer' },
     { path: 'pdf_importer' }, { path: 'skill_tree' }, { path: 'planner' }, { path: 'tutor' },
     { path: 'profile' }, { path: 'global_chat' }, { path: 'shadowing_lab' }, { path: 'word_duel' },
+    { path: 'login' }, { path: 'signup' }
 ];
 
 new Router(routes);
@@ -178,6 +171,23 @@ function render() {
     const state = store.getState();
     const root = document.getElementById('root');
     if (!root) return;
+
+    if (state.loading) {
+        root.innerHTML = '<div class="h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950"><p class="font-black text-brand-primary animate-pulse">ADAI YÜKLENİYOR...</p></div>';
+        return;
+    }
+
+    // Auth check
+    if (!state.user && state.activeTab !== 'signup') {
+        root.innerHTML = '';
+        root.appendChild(renderLoginPage());
+        return;
+    }
+    if (!state.user && state.activeTab === 'signup') {
+        root.innerHTML = '';
+        root.appendChild(renderSignUpPage());
+        return;
+    }
 
     root.innerHTML = '';
 
