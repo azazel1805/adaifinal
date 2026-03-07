@@ -44,12 +44,10 @@ import { renderProfile } from './pages/Profile';
 import { renderGlobalChat } from './pages/GlobalChat';
 import { renderShadowingLab } from './pages/ShadowingLab';
 import { renderWordDuel } from './pages/WordDuel';
-import { renderLoginPage } from './pages/LoginPage';
-import { renderSignUpPage } from './pages/SignUpPage';
 import { initPerformanceStats } from './utils/performance';
 import { listenToFriendships, listenToPendingRequests } from './services/socialService';
+import { renderLoginPage } from './pages/LoginPage';
 import { initAuth } from './store/auth';
-
 import { initHistory } from './store/history';
 import { initChallenge } from './store/challenge';
 import { initVocabulary } from './store/vocabulary';
@@ -96,6 +94,7 @@ const PAGE_TITLES = {
 
 // ─── Init ─────────────────────────────────────────────────────────
 initAuth();
+
 initHistory();
 initChallenge();
 initPdfExam();
@@ -134,7 +133,7 @@ const routes = [
     { path: 'translation_analyst' }, { path: 'pragmatic_analyzer' },
     { path: 'pdf_importer' }, { path: 'skill_tree' }, { path: 'planner' }, { path: 'tutor' },
     { path: 'profile' }, { path: 'global_chat' }, { path: 'shadowing_lab' }, { path: 'word_duel' },
-    { path: 'login' }, { path: 'signup' }
+    { path: 'login' }
 ];
 
 new Router(routes);
@@ -177,15 +176,9 @@ function render() {
         return;
     }
 
-    // Auth check
-    if (!state.user && state.activeTab !== 'signup') {
+    if (!state.user) {
         root.innerHTML = '';
         root.appendChild(renderLoginPage());
-        return;
-    }
-    if (!state.user && state.activeTab === 'signup') {
-        root.innerHTML = '';
-        root.appendChild(renderSignUpPage());
         return;
     }
 

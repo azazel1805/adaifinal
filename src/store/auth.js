@@ -1,29 +1,47 @@
 import {
     onAuthStateChanged,
-    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
     signOut
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import store from './index';
 
 export const initAuth = () => {
     let profileUnsubscribe;
 
-    onAuthStateChanged(auth, (currentUser) => {
+    onAuthStateChanged(auth, async (currentUser) => {
         store.setState({ user: currentUser });
 
         if (profileUnsubscribe) {
             profileUnsubscribe();
+            profileUnsubscribe = null;
         }
 
         if (currentUser) {
             const userDocRef = doc(db, "users", currentUser.uid);
+
+            // Check if profile exists, if not, create it
+            const docSnap = await getDoc(userDocRef);
+            if (!docSnap.exists()) {
+                await setDoc(userDocRef, {
+                    uid: currentUser.uid,
+                    email: currentUser.email,
+                    displayName: currentUser.displayName,
+                    photoURL: currentUser.photoURL,
+                    createdAt: serverTimestamp(),
+                    subscription: {
+                        status: 'active',
+                        plan: 'free'
+                    }
+                });
+            }
+
             profileUnsubscribe = onSnapshot(userDocRef, (snapshot) => {
                 if (snapshot.exists()) {
                     store.setState({ userProfile: snapshot.data(), loading: false });
                 } else {
-                    console.error("Kullanıcı profili bulunamadı.");
                     store.setState({ userProfile: null, loading: false });
                 }
             });
@@ -33,9 +51,10 @@ export const initAuth = () => {
     });
 };
 
-export const login = async (email, password) => {
+export const loginWithGoogle = async () => {
     try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
     } catch (error) {
         console.error("Giriş sırasında hata oluştu:", error);
         throw error;
