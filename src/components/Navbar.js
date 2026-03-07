@@ -1,73 +1,79 @@
 import store from '../store/index';
 
 const MENU_STRUCTURE = [
-  { id: 'dashboard', label: 'Ana Sayfa' },
+  { id: 'dashboard', label: 'Ana Sayfa', icon: '🏠' },
   {
     id: 'yds_ydt',
     label: 'Uzman Analizleri',
+    icon: '📊',
     items: [
-      { id: 'deconstruction', label: 'Metin Deşifresi' },
-      { id: 'diagrammer', label: 'Cümle Görselleştirici' },
-      { id: 'analyzer', label: 'Metin Analizci' },
-      { id: 'reading', label: 'Okuma Analizi' },
-      { id: 'translation_analyst', label: 'Çeviri Analizci' },
-      { id: 'pragmatic_analyzer', label: 'Pragmatik Analizci' },
-      { id: 'cohesion_analyzer', label: 'Bağlam Analizci' }
+      { id: 'deconstruction', label: 'Metin Deşifresi', icon: '🔍' },
+      { id: 'diagrammer', label: 'Cümle Görselleştirici', icon: '📈' },
+      { id: 'analyzer', label: 'Metin Analizci', icon: '📝' },
+      { id: 'reading', label: 'Okuma Analizi', icon: '📖' },
+      { id: 'translation_analyst', label: 'Çeviri Analizci', icon: '🔄' },
+      { id: 'pragmatic_analyzer', label: 'Pragmatik Analizci', icon: '🎭' },
+      { id: 'cohesion_analyzer', label: 'Bağlam Analizci', icon: '🔗' }
     ]
   },
   {
     id: 'gen_english',
     label: 'Dil Çekirdeği',
+    icon: '🧠',
     items: [
-      { id: 'grammar_library', label: 'Gramer Kütüphanesi' },
-      { id: 'basics', label: 'Temel Yapılar' },
-      { id: 'tenses', label: 'Zamanlar' },
-      { id: 'vocabulary', label: 'Kelime Antrenörü' },
-      { id: 'oxford_trainer', label: 'Oxford 5000' },
-      { id: 'dictionary', label: 'Sözlük' },
-      { id: 'writing', label: 'Yazma Pratiği' },
-      { id: 'listening', label: 'Dinleme Pratiği' }
+      { id: 'grammar_library', label: 'Gramer Kütüphanesi', icon: '📚' },
+      { id: 'basics', label: 'Temel Yapılar', icon: '🧱' },
+      { id: 'tenses', label: 'Zamanlar', icon: '⏳' },
+      { id: 'vocabulary', label: 'Kelime Antrenörü', icon: '🏋️' },
+      { id: 'oxford_trainer', label: 'Oxford 5000', icon: '🎓' },
+      { id: 'dictionary', label: 'Sözlük', icon: '📕' },
+      { id: 'writing', label: 'Yazma Pratiği', icon: '✍️' },
+      { id: 'listening', label: 'Dinleme Pratiği', icon: '🎧' }
     ]
   },
   {
     id: 'ai_tools',
     label: 'Bilişsel Lab',
+    icon: '🧪',
     items: [
-      { id: 'tutor', label: 'AI Tutor' },
-      { id: 'placement_test', label: 'Seviye Tespit' },
-      { id: 'podcast_maker', label: 'Podcast Oluşturucu' },
-      { id: 'essay_outliner', label: 'Essay Taslak' },
-      { id: 'speaking_simulator', label: 'Konuşma Simülatörü' },
-      { id: 'shadowing_lab', label: 'Shadowing Lab' }
+      { id: 'tutor', label: 'AI Tutor', icon: '🤖' },
+      { id: 'placement_test', label: 'Seviye Tespit', icon: '🎯' },
+      { id: 'podcast_maker', label: 'Podcast Oluşturucu', icon: '🎙️' },
+      { id: 'essay_outliner', label: 'Essay Taslak', icon: '📄' },
+      { id: 'speaking_simulator', label: 'Konuşma Simülatörü', icon: '🗣️' },
+      { id: 'shadowing_lab', label: 'Shadowing Lab', icon: '👥' }
     ]
   },
   {
     id: 'games',
     label: 'Oyunlar',
+    icon: '🎮',
     items: [
-      { id: 'crossword', label: 'Bulmaca' },
-      { id: 'hangman', label: 'Adam Asmaca' },
-      { id: 'word_sprint', label: 'Kelime Koşusu' },
-      { id: 'concept_weaver', label: 'Kavram Örücü' }
+      { id: 'crossword', label: 'Bulmaca', icon: '🧩' },
+      { id: 'hangman', label: 'Adam Asmaca', icon: '🪢' },
+      { id: 'word_sprint', label: 'Kelime Koşusu', icon: '🏃' },
+      { id: 'concept_weaver', label: 'Kavram Örücü', icon: '🕸️' }
     ]
   },
   {
     id: 'community',
     label: 'Topluluk',
+    icon: '🌍',
     items: [
-      { id: 'word_duel', label: 'Kelime Düellosu' },
-      { id: 'global_chat', label: 'Küresel Sohbet' }
+      { id: 'word_duel', label: 'Kelime Düellosu', icon: '⚔️' },
+      { id: 'global_chat', label: 'Küresel Sohbet', icon: '💬' }
     ]
   },
   {
     id: 'profile',
     label: 'Profil',
+    icon: '👤',
     items: [
-      { id: 'profile', label: 'Genel Profil' },
-      { id: 'skill_tree', label: 'Yetenek Ağacı' },
-      { id: 'planner', label: 'Çalışma Planı' },
-      { id: 'history', label: 'Geçmiş' },
-      { id: 'admin', label: 'Yönetim' }
+      { id: 'profile', label: 'Genel Profil', icon: '📋' },
+      { id: 'skill_tree', label: 'Yetenek Ağacı', icon: '🌲' },
+      { id: 'planner', label: 'Çalışma Planı', icon: '📅' },
+      { id: 'history', label: 'Geçmiş', icon: '🕒' },
+      { id: 'admin', label: 'Yönetim', icon: '⚙️' }
     ]
   }
 ];
@@ -97,7 +103,7 @@ export function renderNavbar() {
         return `
                     <a href="#${group.id}" class="h-full flex items-center px-1 border-b-2 text-sm font-bold uppercase tracking-wider transition-all
                       ${isActive ? 'border-brand-primary text-zinc-900' : 'border-transparent text-zinc-500 hover:text-zinc-800 hover:border-zinc-300'}">
-                      ${group.label}
+                      <span class="mr-2">${group.icon}</span> ${group.label}
                     </a>
                   `;
       }
@@ -107,7 +113,7 @@ export function renderNavbar() {
                   <div class="relative group h-full flex items-center">
                     <button class="h-full flex items-center gap-1.5 px-1 border-b-2 text-sm font-bold uppercase tracking-wider transition-all
                       ${hasActiveChild ? 'border-brand-primary text-zinc-900' : 'border-transparent text-zinc-500 hover:text-zinc-800 hover:border-zinc-300'}">
-                      ${group.label}
+                      <span class="mr-1">${group.icon}</span> ${group.label}
                       <svg class="w-4 h-4 opacity-50 group-hover:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path d="M19 9l-7 7-7-7"/>
                       </svg>
@@ -118,7 +124,7 @@ export function renderNavbar() {
                       ${group.items.map(item => `
                         <a href="#${item.id}" class="flex items-center px-4 py-3 rounded-xl text-sm font-semibold transition-all
                           ${activeTab === item.id ? 'bg-zinc-50 text-brand-primary' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'}">
-                          ${item.label}
+                          <span class="mr-3 text-lg">${item.icon}</span> ${item.label}
                         </a>
                       `).join('')}
                     </div>
@@ -156,12 +162,12 @@ export function renderNavbar() {
          </div>
          <div class="space-y-4 overflow-y-auto max-h-[80vh]">
             ${MENU_STRUCTURE.map(group => {
-      if (!group.items) return `<a href="#${group.id}" class="block text-lg font-bold py-2 border-b border-zinc-50">${group.label}</a>`;
+      if (!group.items) return `<a href="#${group.id}" class="flex items-center text-lg font-bold py-2 border-b border-zinc-50"><span class="mr-3 text-xl">${group.icon}</span> ${group.label}</a>`;
       return `
                 <div class="space-y-2">
-                   <h3 class="text-xs font-black text-zinc-400 uppercase tracking-widest pt-4">${group.label}</h3>
+                   <h3 class="flex items-center text-xs font-black text-zinc-400 uppercase tracking-widest pt-4"><span class="mr-2">${group.icon}</span> ${group.label}</h3>
                    <div class="grid grid-cols-2 gap-2">
-                      ${group.items.map(i => `<a href="#${i.id}" class="text-sm font-bold p-3 bg-zinc-50 rounded-xl">${i.label}</a>`).join('')}
+                      ${group.items.map(i => `<a href="#${i.id}" class="flex items-center text-sm font-bold p-3 bg-zinc-50 rounded-xl"><span class="mr-2 text-lg">${i.icon}</span> ${i.label}</a>`).join('')}
                    </div>
                 </div>
               `;

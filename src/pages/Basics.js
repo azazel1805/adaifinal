@@ -75,11 +75,7 @@ const renderNumbers = () => {
     return `
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 animate-fadeIn">
             ${numbers.map(n => `
-<<<<<<< HEAD
-                <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${n.word.en}'))" class="p-6 bg-slate-50 dark:bg-slate-800 rounded-3xl text-center border-2 border-transparent hover:border-brand-primary group transition-all">
-=======
                 <button onclick="window.speakEn('${n.word}')" class="p-6 bg-slate-50 dark:bg-slate-800 rounded-3xl text-center border-2 border-transparent hover:border-brand-primary group transition-all">
->>>>>>> b32d3a7 (feat: integrate oxford 5000 and fix dictionary toggles)
                     <p class="text-4xl font-black text-slate-900 dark:text-white group-hover:text-brand-primary transition-colors">${n.num}</p>
                     <p class="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">${n.word}</p>
                 </button>
@@ -93,11 +89,7 @@ const renderAlphabet = () => {
     return `
         <div class="grid grid-cols-5 sm:grid-cols-6 gap-3 animate-fadeIn">
             ${alphabet.map(l => `
-<<<<<<< HEAD
-                <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${l.en}'))" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center font-black text-2xl text-slate-900 dark:text-white hover:bg-brand-primary hover:text-white shadow-sm transition-all">
-=======
                 <button onclick="window.speakEn('${l}')" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center font-black text-2xl text-slate-900 dark:text-white hover:bg-brand-primary hover:text-white shadow-sm transition-all">
->>>>>>> b32d3a7 (feat: integrate oxford 5000 and fix dictionary toggles)
                     ${l}
                 </button>
             `).join('')}
@@ -143,11 +135,7 @@ const renderSeasons = () => {
                     </h4>
                     <div class="grid grid-cols-3 gap-3">
                         ${d.months.map(m => `
-<<<<<<< HEAD
-                            <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${m.en}'))" class="p-4 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 ${d.cls}">${m}</button>
-=======
                             <button onclick="window.speakEn('${m}')" class="p-4 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 ${d.cls}">${m}</button>
->>>>>>> b32d3a7 (feat: integrate oxford 5000 and fix dictionary toggles)
                         `).join('')}
                     </div>
                 </div>
