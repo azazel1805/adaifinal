@@ -129,7 +129,7 @@ const renderSeasons = () => {
                     </h4>
                     <div class="grid grid-cols-3 gap-3">
                         ${d.months.map(m => `
-                            <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${m.en}'))" class="p-4 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 ${d.cls}">${m}</button>
+                            <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${m}'))" class="p-4 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 ${d.cls}">${m}</button>
                         `).join('')}
                     </div>
                 </div>
