@@ -1895,3 +1895,24 @@ export const listTTSVoices = async () => {
         throw new Error("Could not fetch available voices. Please try again.");
     }
 };
+
+export const generateGeminiResponse = async (messages, expectJson = false) => {
+    // Determine target based on expectations. For simple messages, we use default fetch logic over ai.models because messages are passed as OpenAI styled
+    // We can translate messages back to a simple prompt string for simplicity
+    const prompt = messages.map(m => m.content).join('\n---\n');
+    let response;
+    try {
+        if (expectJson) {
+            response = await ai.models.generateContent({
+                contents: prompt,
+                config: { responseMimeType: 'application/json' }
+            });
+        } else {
+            response = await ai.models.generateContent(prompt);
+        }
+        return response.text;
+    } catch (err) {
+        console.error("Gemini response error", err);
+        throw err;
+    }
+};

@@ -23,6 +23,7 @@ const MENU_STRUCTURE = [
       { id: 'basics', label: 'Temel Yapılar' },
       { id: 'tenses', label: 'Zamanlar' },
       { id: 'vocabulary', label: 'Kelime Antrenörü' },
+      { id: 'oxford_trainer', label: 'Oxford 5000' },
       { id: 'dictionary', label: 'Sözlük' },
       { id: 'writing', label: 'Yazma Pratiği' },
       { id: 'listening', label: 'Dinleme Pratiği' }

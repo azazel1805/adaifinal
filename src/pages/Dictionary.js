@@ -187,7 +187,9 @@ export const renderDictionary = () => {
         attachEvents();
     };
 
-    const renderEnToTr = (entry) => `
+    const renderEnToTr = (entry) => {
+        if (!entry) return '';
+        return `
         <div class="space-y-10">
             ${entry.turkishMeanings ? `
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -260,8 +262,11 @@ export const renderDictionary = () => {
             ` : ''}
         </div>
     `;
+    };
 
-    const renderTrToEn = (result) => `
+    const renderTrToEn = (result) => {
+        if (!result) return '';
+        return `
         <div class="space-y-6">
             <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">İngilizce Karşılıkları</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -287,6 +292,7 @@ export const renderDictionary = () => {
             </div>
         </div>
     `;
+    };
 
     const attachEvents = () => {
         const input = container.querySelector('#dict-input');
@@ -301,8 +307,20 @@ export const renderDictionary = () => {
             const val = container.querySelector('#dict-input')?.value || state.word;
             executeSearch(val);
         };
-        container.querySelector('#en-tr-btn').onclick = () => setState({ direction: 'en_to_tr' });
-        container.querySelector('#tr-en-btn').onclick = () => setState({ direction: 'tr_to_en' });
+        container.querySelector('#en-tr-btn').onclick = () => {
+            if (state.direction !== 'en_to_tr') {
+                state.direction = 'en_to_tr';
+                if (state.word) executeSearch(state.word);
+                else setState({ direction: 'en_to_tr' });
+            }
+        };
+        container.querySelector('#tr-en-btn').onclick = () => {
+            if (state.direction !== 'tr_to_en') {
+                state.direction = 'tr_to_en';
+                if (state.word) executeSearch(state.word);
+                else setState({ direction: 'tr_to_en' });
+            }
+        };
 
         const pronounceBtn = container.querySelector('#pronounce-btn');
         if (pronounceBtn) pronounceBtn.onclick = () => handleSpeak(state.word);

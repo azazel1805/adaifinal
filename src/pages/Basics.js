@@ -10,8 +10,14 @@ const speak = (text) => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
+
+    const voices = window.speechSynthesis.getVoices();
+    const enVoice = voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang.startsWith('en-'));
+    if (enVoice) utterance.voice = enVoice;
+
     window.speechSynthesis.speak(utterance);
 };
+window.speakEn = speak;
 
 const moduleData = {
     colors: { title: 'Renkleri Öğren', icon: '🎨', description: 'Renkleri ve okunuşlarını keşfet.' },
@@ -44,7 +50,7 @@ const renderColors = () => {
     return `
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 animate-fadeIn">
             ${colors.map(c => `
-                <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${c.name}'))" style="background-color: ${c.hex}; border: ${c.name === 'white' ? '1px solid #ccc' : 'none'}" class="p-6 h-36 rounded-3xl flex flex-col justify-between items-start transition-all hover:scale-105 shadow-lg ${c.txt}">
+                <button onclick="window.speakEn('${c.name}')" style="background-color: ${c.hex}; border: ${c.name === 'white' ? '1px solid #ccc' : 'none'}" class="p-6 h-36 rounded-3xl flex flex-col justify-between items-start transition-all hover:scale-105 shadow-lg ${c.txt}">
                     <div>
                         <p class="text-xl font-black capitalize tracking-tight">${c.name}</p>
                         <p class="text-xs font-bold opacity-80 uppercase">${c.tr}</p>
@@ -69,7 +75,11 @@ const renderNumbers = () => {
     return `
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 animate-fadeIn">
             ${numbers.map(n => `
+<<<<<<< HEAD
                 <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${n.word.en}'))" class="p-6 bg-slate-50 dark:bg-slate-800 rounded-3xl text-center border-2 border-transparent hover:border-brand-primary group transition-all">
+=======
+                <button onclick="window.speakEn('${n.word}')" class="p-6 bg-slate-50 dark:bg-slate-800 rounded-3xl text-center border-2 border-transparent hover:border-brand-primary group transition-all">
+>>>>>>> b32d3a7 (feat: integrate oxford 5000 and fix dictionary toggles)
                     <p class="text-4xl font-black text-slate-900 dark:text-white group-hover:text-brand-primary transition-colors">${n.num}</p>
                     <p class="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">${n.word}</p>
                 </button>
@@ -83,7 +93,11 @@ const renderAlphabet = () => {
     return `
         <div class="grid grid-cols-5 sm:grid-cols-6 gap-3 animate-fadeIn">
             ${alphabet.map(l => `
+<<<<<<< HEAD
                 <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${l.en}'))" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center font-black text-2xl text-slate-900 dark:text-white hover:bg-brand-primary hover:text-white shadow-sm transition-all">
+=======
+                <button onclick="window.speakEn('${l}')" class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center font-black text-2xl text-slate-900 dark:text-white hover:bg-brand-primary hover:text-white shadow-sm transition-all">
+>>>>>>> b32d3a7 (feat: integrate oxford 5000 and fix dictionary toggles)
                     ${l}
                 </button>
             `).join('')}
@@ -100,7 +114,7 @@ const renderDays = () => {
     return `
         <div class="space-y-3 animate-fadeIn">
             ${days.map(d => `
-                <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${d.en}'))" class="w-full p-6 bg-slate-50 dark:bg-slate-800 rounded-[2rem] flex justify-between items-center group hover:bg-brand-primary transition-all">
+                <button onclick="window.speakEn('${d.en}')" class="w-full p-6 bg-slate-50 dark:bg-slate-800 rounded-[2rem] flex justify-between items-center group hover:bg-brand-primary transition-all">
                     <div class="text-left">
                         <p class="text-lg font-black text-slate-900 dark:text-white group-hover:text-white whitespace-pre-wrap">${d.en}</p>
                         <p class="text-[10px] font-black text-slate-400 group-hover:text-white/60 uppercase tracking-widest">${d.tr}</p>
@@ -129,7 +143,11 @@ const renderSeasons = () => {
                     </h4>
                     <div class="grid grid-cols-3 gap-3">
                         ${d.months.map(m => `
+<<<<<<< HEAD
                             <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${m.en}'))" class="p-4 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 ${d.cls}">${m}</button>
+=======
+                            <button onclick="window.speakEn('${m}')" class="p-4 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 ${d.cls}">${m}</button>
+>>>>>>> b32d3a7 (feat: integrate oxford 5000 and fix dictionary toggles)
                         `).join('')}
                     </div>
                 </div>
@@ -261,7 +279,7 @@ export const renderBasics = () => {
                                     <p class="text-[10px] font-bold text-slate-400 mb-3 italic">${u.description}</p>
                                     <div class="flex items-center justify-between">
                                         <p class="text-sm font-black text-slate-800 dark:text-white capitalize">${u.example.en}</p>
-                                        <button onclick="window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('${u.example.en}'))" class="text-xl opacity-40 hover:opacity-100">🔊</button>
+                                        <button onclick="window.speakEn('${u.example.en.replace(/'/g, "\\'")}')" class="text-xl opacity-40 hover:opacity-100">🔊</button>
                                     </div>
                                     <p class="text-[10px] font-bold text-slate-400 mt-1">${u.example.tr}</p>
                                 </div>

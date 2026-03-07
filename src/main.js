@@ -44,6 +44,7 @@ import { renderProfile } from './pages/Profile';
 import { renderGlobalChat } from './pages/GlobalChat';
 import { renderShadowingLab } from './pages/ShadowingLab';
 import { renderWordDuel } from './pages/WordDuel';
+import { renderOxfordTrainer } from './pages/OxfordTrainer';
 import { initPerformanceStats } from './utils/performance';
 import { listenToFriendships, listenToPendingRequests } from './services/socialService';
 import { renderLoginPage } from './pages/LoginPage';
@@ -90,6 +91,7 @@ const PAGE_TITLES = {
     profile: 'Profil | ADAI',
     global_chat: 'Global Chat | ADAI',
     admin: 'Yönetim | ADAI',
+    oxford_trainer: 'Oxford 5000 | ADAI',
 };
 
 // ─── Init ─────────────────────────────────────────────────────────
@@ -133,7 +135,7 @@ const routes = [
     { path: 'translation_analyst' }, { path: 'pragmatic_analyzer' },
     { path: 'pdf_importer' }, { path: 'skill_tree' }, { path: 'planner' }, { path: 'tutor' },
     { path: 'profile' }, { path: 'global_chat' }, { path: 'shadowing_lab' }, { path: 'word_duel' },
-    { path: 'login' }
+    { path: 'login' }, { path: 'oxford_trainer' }
 ];
 
 new Router(routes);
@@ -304,6 +306,8 @@ function render() {
             contentArea.appendChild(renderShadowingLab()); break;
         case 'word_duel':
             contentArea.appendChild(renderWordDuel()); break;
+        case 'oxford_trainer':
+            contentArea.appendChild(renderOxfordTrainer()); break;
         default:
             contentArea.innerHTML = `<div class="flex flex-col items-center justify-center py-24 text-center space-y-4">
                 <div class="text-5xl opacity-30">🚧</div>
