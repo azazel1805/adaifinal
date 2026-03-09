@@ -41,7 +41,8 @@ export const renderAdminPage = () => {
     const render = () => {
         const { user: currentUser } = store.getState();
         const users = []; // Mock users table in Vanilla JS
-        if (currentUser?.email !== 'admin@adai.com' && currentUser?.uid !== 'admin') {
+        const email = currentUser?.email?.toLowerCase();
+        if (email !== 'admin@adai.com' && email !== 'onurtosuner@gmail.com' && currentUser?.uid !== 'admin') {
             container.innerHTML = `
                 <div class="text-center py-20 bg-white dark:bg-slate-900 rounded-[3.5rem] shadow-2xl border-4 border-red-500/10">
                     <span class="text-8xl block mb-8">🚫</span>

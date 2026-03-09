@@ -13,6 +13,7 @@
 
   html {
     font-family: 'Inter', system-ui, sans-serif;
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -139,7 +140,8 @@ input[type="range"]::-webkit-slider-thumb {
 /* ---- Mobile bottom padding ---- */
 @media (max-width: 1023px) {
   #content-area {
-    padding-bottom: 6rem; /* Match pb-24 */
+    padding-bottom: 6rem;
+    /* Match pb-24 */
   }
 }
 

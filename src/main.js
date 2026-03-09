@@ -203,15 +203,17 @@ function render() {
     const shell = document.createElement('div');
     shell.className = 'flex flex-col h-screen bg-zinc-50 text-zinc-900 font-sans overflow-hidden';
 
-    // Top Navbar
-    shell.appendChild(renderNavbar());
+    // Top Navbar will be added inside mainArea -> scrollArea to align with content-area
 
     // Main area
     const mainArea = document.createElement('main');
     mainArea.className = 'flex-1 flex flex-col min-w-0 overflow-hidden';
 
     const scrollArea = document.createElement('div');
-    scrollArea.className = 'flex-1 overflow-y-auto';
+    scrollArea.className = 'flex-1 overflow-y-auto w-full';
+
+    // Desktop/Top Navbar
+    scrollArea.appendChild(renderNavbar());
 
     const contentArea = document.createElement('div');
     contentArea.id = 'content-area';
