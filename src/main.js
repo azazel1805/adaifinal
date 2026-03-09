@@ -48,6 +48,7 @@ import { renderOxfordTrainer } from './pages/OxfordTrainer';
 import { initPerformanceStats } from './utils/performance';
 import { listenToFriendships, listenToPendingRequests } from './services/socialService';
 import { renderLoginPage } from './pages/LoginPage';
+import { renderSignUpPage } from './pages/SignUpPage';
 import { initAuth } from './store/auth';
 import { initHistory } from './store/history';
 import { initChallenge } from './store/challenge';
@@ -143,7 +144,7 @@ new Router(routes);
 // ─── Mobile bottom nav ────────────────────────────────────────────
 function renderBottomNav(activeTab) {
     const nav = document.createElement('nav');
-    nav.className = 'fixed bottom-0 left-0 right-0 z-20 md:hidden flex items-stretch bg-white border-t border-zinc-200 shadow-lg';
+    nav.className = 'fixed bottom-0 left-0 right-0 z-20 lg:hidden flex items-stretch bg-white border-t border-zinc-200 shadow-lg';
 
     const items = [
         { id: 'dashboard', label: 'Ana Sayfa', icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>` },
@@ -180,7 +181,17 @@ function render() {
 
     if (!state.user) {
         root.innerHTML = '';
-        root.appendChild(renderLoginPage());
+        if (state.activeTab === 'signup') {
+            root.appendChild(renderSignUpPage());
+        } else {
+            root.appendChild(renderLoginPage());
+        }
+        return;
+    }
+
+    // Redirect logged-in users away from login/signup
+    if (state.activeTab === 'login' || state.activeTab === 'signup') {
+        window.location.hash = 'dashboard';
         return;
     }
 
@@ -204,7 +215,7 @@ function render() {
 
     const contentArea = document.createElement('div');
     contentArea.id = 'content-area';
-    contentArea.className = 'p-4 sm:p-6 lg:p-8 pb-24 md:pb-8 bg-zinc-50 min-h-full';
+    contentArea.className = 'max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 min-h-full';
     scrollArea.appendChild(contentArea);
     mainArea.appendChild(scrollArea);
     shell.appendChild(mainArea);

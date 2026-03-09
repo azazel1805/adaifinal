@@ -111,7 +111,11 @@ export const renderEssayOutliner = () => {
     const attachEvents = () => {
         container.querySelectorAll('.type-btn').forEach(btn => btn.onclick = () => setState({ essayType: btn.dataset.t }));
         const topicInp = container.querySelector('#topic-input');
-        if (topicInp) topicInp.oninput = (e) => state.topic = e.target.value;
+        if (topicInp) topicInp.oninput = (e) => {
+            state.topic = e.target.value;
+            const outlineBtn = container.querySelector('#outline-btn');
+            if (outlineBtn) outlineBtn.disabled = state.isLoadingOutline || !state.essayType || !state.topic.trim();
+        };
         const outBtn = container.querySelector('#outline-btn');
         if (outBtn) outBtn.onclick = handleGenerateOutline;
         const essBtn = container.querySelector('#essay-btn');

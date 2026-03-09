@@ -137,9 +137,9 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* ---- Mobile bottom padding ---- */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   #content-area {
-    padding-bottom: 5rem;
+    padding-bottom: 6rem; /* Match pb-24 */
   }
 }
 

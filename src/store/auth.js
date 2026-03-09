@@ -2,6 +2,7 @@ import {
     onAuthStateChanged,
     GoogleAuthProvider,
     signInWithPopup,
+    signInWithEmailAndPassword,
     signOut
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
@@ -57,6 +58,15 @@ export const loginWithGoogle = async () => {
         await signInWithPopup(auth, provider);
     } catch (error) {
         console.error("Giriş sırasında hata oluştu:", error);
+        throw error;
+    }
+};
+
+export const loginWithEmail = async (email, password) => {
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+        console.error("Email ile giriş hatası:", error);
         throw error;
     }
 };

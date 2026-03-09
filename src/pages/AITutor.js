@@ -267,7 +267,11 @@ export const renderAITutor = () => {
             const form = container.querySelector('#chat-form');
             form?.addEventListener('submit', handleSendMessage);
             const input = container.querySelector('#chat-input');
-            input?.addEventListener('input', (e) => { state.userInput = e.target.value; });
+            input?.addEventListener('input', (e) => {
+                state.userInput = e.target.value;
+                const submitBtn = container.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = !state.userInput.trim() || state.isLoading;
+            });
         }
 
         if (state.error) {

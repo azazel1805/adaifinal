@@ -206,7 +206,7 @@ export const renderWritingAssistant = () => {
                         <div class="mt-10 animate-slideRight space-y-6">
                             <span class="text-[10px] font-black text-brand-primary uppercase tracking-[0.3em] pl-8 block">ADIM 2</span>
                             <textarea id="writing-input" placeholder="Metninizi buraya yazın..." class="w-full h-80 p-8 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-[2.5rem] focus:ring-4 focus:ring-brand-primary/20 focus:border-brand-primary focus:outline-none font-bold text-slate-900 dark:text-white transition-all text-lg shadow-inner resize-none">${state.text}</textarea>
-                            <button id="analyze-btn" class="w-full bg-slate-900 dark:bg-black text-white font-black py-5 rounded-[2rem] shadow-xl uppercase tracking-widest text-xs hover:-translate-y-1 transition-all disabled:opacity-50">
+                            <button id="analyze-btn" class="w-full bg-slate-900 dark:bg-black text-white font-black py-5 rounded-[2rem] shadow-xl uppercase tracking-widest text-xs hover:-translate-y-1 transition-all disabled:opacity-50" ${state.isLoadingAnalysis || !state.text.trim() || !state.topic ? 'disabled' : ''}>
                                 ${state.isLoadingAnalysis ? 'ANALİZ EDİLİYOR...' : 'YAZIMI ANALİZ ET 🔍'}
                             </button>
                         </div>
@@ -233,7 +233,11 @@ export const renderWritingAssistant = () => {
         if (getTopicBtn) getTopicBtn.onclick = handleGetTopic;
 
         const input = container.querySelector('#writing-input');
-        if (input) input.onchange = (e) => state.text = e.target.value;
+        if (input) input.oninput = (e) => {
+            state.text = e.target.value;
+            const analyzeBtn = container.querySelector('#analyze-btn');
+            if (analyzeBtn) analyzeBtn.disabled = state.isLoadingAnalysis || !state.text.trim() || !state.topic;
+        };
 
         const analyzeBtn = container.querySelector('#analyze-btn');
         if (analyzeBtn) analyzeBtn.onclick = handleAnalyze;

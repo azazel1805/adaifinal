@@ -1,140 +1,179 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { doc, getDoc, writeBatch } from 'firebase/firestore';
 import store from '../store/index';
 
 export function renderSignUpPage() {
-    const container = document.createElement('div');
-    container.className = 'flex min-h-screen items-center justify-center bg-slate-100 dark:bg-slate-950 px-4 py-12';
+  const container = document.createElement('div');
+  container.className = 'min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 relative overflow-hidden';
 
-    let email = '';
-    let password = '';
-    let activationCode = '';
-    let loading = false;
-    let error = '';
+  let state = {
+    name: '',
+    email: '',
+    password: '',
+    activationCode: '',
+    isLoading: false,
+    error: ''
+  };
 
-    const updateUI = () => {
-        container.innerHTML = `
-      <div class="w-full max-w-md mx-auto">
+  const render = () => {
+    container.innerHTML = `
+      <!-- Background Shapes -->
+      <div class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-primary/5 rounded-full blur-[120px] -z-10"></div>
+      <div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-secondary/5 rounded-full blur-[120px] -z-10"></div>
+
+      <div class="w-full max-w-lg animate-fadeIn">
+        <!-- Logo Section -->
         <div class="text-center mb-8">
-          <div class="inline-block p-4 bg-slate-900 dark:bg-slate-800 rounded-full shadow-lg">
-            <h1 class="text-2xl font-bold text-white">ADAI</h1>
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-slate-900 rounded-2xl shadow-2xl mb-4 transform -rotate-3 hover:rotate-0 transition-all duration-500">
+            <span class="text-2xl font-black text-white italic">A</span>
           </div>
+          <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase italic">Yeni Hesap</h1>
+          <p class="text-slate-500 dark:text-slate-400 font-medium text-sm">ADAI ailesine katılın</p>
         </div>
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 space-y-6">
-          <div class="text-center">
-            <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Hesap Oluştur</h1>
-            <p class="text-slate-500 dark:text-slate-400 mt-2">ADAI dünyasına katıl ve öğrenmeye başla!</p>
+
+        <!-- Signup Card -->
+        <div class="bg-white dark:bg-slate-900 rounded-[3.5rem] shadow-2xl border-4 border-slate-50 dark:border-slate-800 p-10 space-y-8">
+          <div class="text-center space-y-2">
+            <h2 class="text-2xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight italic">Kayıt Ol</h2>
+            <p class="text-[10px] font-black text-brand-secondary uppercase tracking-[0.3em]">Hemen öğrenmeye başla</p>
           </div>
-          <form id="signup-form" class="space-y-6">
-            <div>
-              <label for="email" class="text-sm font-medium text-slate-700 dark:text-slate-300">E-posta Adresi</label>
-              <input id="email" type="email" required value="${email}" class="mt-2 block w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-adai-primary focus:outline-none transition" />
+
+          ${state.error ? `
+            <div class="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl animate-shake">
+                <p class="text-xs font-bold text-red-500 text-center">${state.error}</p>
             </div>
-            <div>
-              <label for="password" class="text-sm font-medium text-slate-700 dark:text-slate-300">Şifre Belirle</label>
-              <input id="password" type="password" required value="${password}" class="mt-2 block w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-adai-primary focus:outline-none transition" />
+          ` : ''}
+
+          <form id="signup-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2 col-span-1">
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-4">AD SOYAD</label>
+              <input type="text" id="name" value="${state.name}" required placeholder="John Doe" 
+                class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-brand-primary/20 rounded-2xl outline-none font-bold text-sm transition-all shadow-inner">
             </div>
-            <div>
-              <label for="activationCode" class="text-sm font-medium text-slate-700 dark:text-slate-300">Aktivasyon Kodu</label>
-              <input id="activationCode" type="text" required value="${activationCode}" placeholder="E-postanıza gelen kodu girin" class="mt-2 block w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-adai-primary focus:outline-none transition" />
-               <div class="text-center mt-3">
-                    <a href="https://www.shopier.com/onurtosuner" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-adai-primary hover:text-adai-secondary transition-colors">
-                        Aktivasyon kodun yok mu? Hemen satın al!
-                    </a>
-                </div>
+
+            <div class="space-y-2 col-span-1">
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-4">E-POSTA</label>
+              <input type="email" id="email" value="${state.email}" required placeholder="email@ornek.com" 
+                class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-brand-primary/20 rounded-2xl outline-none font-bold text-sm transition-all shadow-inner">
             </div>
-            ${error ? `<p class="text-sm text-red-500 text-center font-medium">${error}</p>` : ''}
-            <div>
-              <button type="submit" ${loading ? 'disabled' : ''} class="w-full flex justify-center rounded-lg bg-adai-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-adai-secondary disabled:opacity-70">
-                ${loading ? 'Hesap Oluşturuluyor...' : 'Kayıt Ol ve Başla'}
-              </button>
+
+            <div class="space-y-2 col-span-1">
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-4">ŞİFRE</label>
+              <input type="password" id="password" value="${state.password}" required placeholder="••••••••" 
+                class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-brand-primary/20 rounded-2xl outline-none font-bold text-sm transition-all shadow-inner">
             </div>
+
+            <div class="space-y-2 col-span-1">
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-4">AKTİVASYON KODU</label>
+              <input type="text" id="activationCode" value="${state.activationCode}" required placeholder="CODE-123" 
+                class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-brand-secondary/20 rounded-2xl outline-none font-black text-sm transition-all shadow-inner text-brand-secondary">
+            </div>
+
+            <div class="col-span-full pt-2">
+                <a href="https://www.shopier.com/onurtosuner" target="_blank" class="block p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 text-center group hover:border-brand-primary transition-all">
+                    <span class="text-[10px] font-bold text-slate-400 group-hover:text-brand-primary">Kodunuz yok mu?</span>
+                    <span class="text-xs font-black text-slate-600 dark:text-slate-300 block mt-1 uppercase tracking-widest">BURADAN SATIN ALIN 💳</span>
+                </a>
+            </div>
+
+            <button type="submit" ${state.isLoading ? 'disabled' : ''} 
+                class="col-span-full py-5 bg-brand-primary text-white font-black rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] uppercase tracking-widest text-xs flex items-center justify-center gap-3 disabled:opacity-50">
+                ${state.isLoading ? '<div class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> HESAP OLUŞTURULUYOR...' : 'KAYIT OL VE BAŞLA 🔥'}
+            </button>
           </form>
-          <div class="text-center mt-6">
-            <p class="text-sm text-slate-500 dark:text-slate-400">
-              Zaten bir hesabın var mı? <button id="to-login" class="font-semibold text-adai-primary hover:text-adai-secondary">Giriş Yap</button>
-            </p>
-          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <p class="text-sm font-bold text-slate-500 dark:text-slate-400">
+            Zaten bir hesabın var mı? 
+            <button id="to-login" class="text-brand-primary hover:underline ml-1 font-black uppercase text-xs tracking-widest">Giriş Yap</button>
+          </p>
         </div>
       </div>
     `;
 
-        // Re-attach event listeners
-        const form = container.querySelector('#signup-form');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            email = container.querySelector('#email').value;
-            password = container.querySelector('#password').value;
-            activationCode = container.querySelector('#activationCode').value;
+    attachEvents();
+  };
 
-            loading = true;
-            error = '';
-            updateUI();
+  const attachEvents = () => {
+    const form = container.querySelector('#signup-form');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      state.name = container.querySelector('#name').value;
+      state.email = container.querySelector('#email').value;
+      state.password = container.querySelector('#password').value;
+      state.activationCode = container.querySelector('#activationCode').value;
 
-            const formattedCode = activationCode.trim();
-            if (!formattedCode) {
-                error = 'Lütfen bir aktivasyon kodu giriniz.';
-                loading = false;
-                updateUI();
-                return;
-            }
+      state.isLoading = true;
+      state.error = '';
+      render();
 
-            try {
-                const codeRef = doc(db, "activationCodes", formattedCode);
-                const codeSnap = await getDoc(codeRef);
+      const formattedCode = state.activationCode.trim();
 
-                if (!codeSnap.exists() || codeSnap.data().status !== 'unused') {
-                    error = 'Geçersiz veya daha önce kullanılmış bir aktivasyon kodu girdiniz.';
-                    loading = false;
-                    updateUI();
-                    return;
-                }
+      try {
+        // Verify activation code
+        const codeRef = doc(db, "activationCodes", formattedCode);
+        const codeSnap = await getDoc(codeRef);
 
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+        if (!codeSnap.exists() || codeSnap.data().status !== 'unused') {
+          throw new Error('Geçersiz veya daha önce kullanılmış aktivasyon kodu.');
+        }
 
-                const batch = writeBatch(db);
-                const userProfileRef = doc(db, "users", user.uid);
-                const subscriptionEndDate = new Date();
-                subscriptionEndDate.setDate(subscriptionEndDate.getDate() + 30);
+        // Create user
+        const userCredential = await createUserWithEmailAndPassword(auth, state.email, state.password);
+        const user = userCredential.user;
 
-                batch.set(userProfileRef, {
-                    email: user.email,
-                    createdAt: new Date(),
-                    subscription: {
-                        status: "active",
-                        endDate: subscriptionEndDate,
-                    }
-                });
+        // Set display name
+        await updateProfile(user, { displayName: state.name });
 
-                batch.update(codeRef, {
-                    status: "used",
-                    usedBy: user.uid,
-                    usedAt: new Date()
-                });
+        // Provision account
+        const batch = writeBatch(db);
+        const userProfileRef = doc(db, "users", user.uid);
 
-                await batch.commit();
-                // Redirect will happen via store change in auth listener
-            } catch (err) {
-                if (err.code === 'auth/email-already-in-use') {
-                    error = 'Bu e-posta adresi zaten kullanılıyor.';
-                } else if (err.code === 'auth/weak-password') {
-                    error = 'Şifre en az 6 karakter olmalıdır.';
-                } else {
-                    error = 'Kayıt sırasında bir hata oluştu.';
-                }
-                loading = false;
-                updateUI();
-            }
+        // Set default 30 days subscription
+        const subscriptionEndDate = new Date();
+        subscriptionEndDate.setDate(subscriptionEndDate.getDate() + 30);
+
+        batch.set(userProfileRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: state.name,
+          createdAt: new Date(),
+          subscription: {
+            status: "active",
+            endDate: subscriptionEndDate,
+            plan: "premium"
+          }
         });
 
-        container.querySelector('#to-login').addEventListener('click', () => {
-            store.setState({ activeTab: 'login' });
-            window.location.hash = 'login';
+        batch.update(codeRef, {
+          status: "used",
+          usedBy: user.uid,
+          usedAt: new Date()
         });
-    };
 
-    updateUI();
-    return container;
+        await batch.commit();
+        // Success - will redirect via store/main logic
+      } catch (err) {
+        if (err.code === 'auth/email-already-in-use') {
+          state.error = 'Bu e-posta adresi zaten kullanılıyor.';
+        } else if (err.code === 'auth/weak-password') {
+          state.error = 'Şifre çok zayıf. En az 6 karakter kullanın.';
+        } else {
+          state.error = err.message || 'Kayıt sırasında bir hata oluştu.';
+        }
+        state.isLoading = false;
+        render();
+      }
+    });
+
+    container.querySelector('#to-login')?.addEventListener('click', () => {
+      store.setState({ activeTab: 'login' });
+      window.location.hash = 'login';
+    });
+  };
+
+  render();
+  return container;
 }

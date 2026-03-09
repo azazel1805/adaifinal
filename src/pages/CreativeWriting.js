@@ -132,7 +132,11 @@ export const renderCreativeWriting = () => {
     const attachEvents = () => {
         container.querySelectorAll('.format-btn').forEach(btn => btn.onclick = () => setState({ format: btn.dataset.f }));
         const startArea = container.querySelector('#start-area');
-        if (startArea) startArea.oninput = (e) => state.startInput = e.target.value;
+        if (startArea) startArea.oninput = (e) => {
+            state.startInput = e.target.value;
+            const startBtn = container.querySelector('#start-btn');
+            if (startBtn) startBtn.disabled = state.isLoading || !state.format || !state.startInput.trim();
+        };
         const startBtn = container.querySelector('#start-btn');
         if (startBtn) startBtn.onclick = handleStart;
 
@@ -141,7 +145,11 @@ export const renderCreativeWriting = () => {
 
         const userInp = container.querySelector('#user-input');
         if (userInp) {
-            userInp.oninput = (e) => state.userInput = e.target.value;
+            userInp.oninput = (e) => {
+                state.userInput = e.target.value;
+                const sendBtn = container.querySelector('#send-btn');
+                if (sendBtn) sendBtn.disabled = state.isLoading || !state.userInput.trim();
+            };
             userInp.onkeydown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
         }
         const sendBtn = container.querySelector('#send-btn');

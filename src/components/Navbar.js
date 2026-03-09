@@ -1,4 +1,5 @@
 import store from '../store/index';
+import { logout } from '../store/auth';
 
 const MENU_STRUCTURE = [
   { id: 'dashboard', label: 'Ana Sayfa', icon: '🏠' },
@@ -73,7 +74,8 @@ const MENU_STRUCTURE = [
       { id: 'skill_tree', label: 'Yetenek Ağacı', icon: '🌲' },
       { id: 'planner', label: 'Çalışma Planı', icon: '📅' },
       { id: 'history', label: 'Geçmiş', icon: '🕒' },
-      { id: 'admin', label: 'Yönetim', icon: '⚙️' }
+      { id: 'admin', label: 'Yönetim', icon: '⚙️' },
+      { id: 'logout', label: 'Çıkış Yap', icon: '🚪' }
     ]
   }
 ];
@@ -88,7 +90,7 @@ export function renderNavbar() {
     nav.innerHTML = `
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20">
-          <div class="flex items-center gap-8">
+          <div class="flex items-center gap-4 lg:gap-8">
             <!-- Logo area -->
             <div class="flex flex-col cursor-pointer" onclick="window.location.hash='dashboard'">
               <span class="text-2xl font-black tracking-tighter text-zinc-900">ADA<span class="text-brand-primary">I</span></span>
@@ -96,7 +98,7 @@ export function renderNavbar() {
             </div>
 
             <!-- Desktop Nav -->
-            <div class="hidden md:flex items-center gap-6 h-full">
+            <div class="hidden lg:flex items-center gap-2 xl:gap-4 h-full">
               ${MENU_STRUCTURE.map(group => {
       if (!group.items) {
         const isActive = activeTab === group.id;
@@ -120,7 +122,7 @@ export function renderNavbar() {
                     </button>
                     
                     <!-- Dropdown -->
-                    <div class="absolute top-full left-0 w-64 bg-white border border-zinc-100 shadow-2xl rounded-2xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all z-50">
+                    <div class="absolute top-full ${group.id === 'profile' || group.id === 'community' ? 'right-0' : 'left-0'} w-64 bg-white border border-zinc-100 shadow-2xl rounded-2xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all z-50">
                       ${group.items.map(item => `
                         <a href="#${item.id}" class="flex items-center px-4 py-3 rounded-xl text-sm font-semibold transition-all
                           ${activeTab === item.id ? 'bg-zinc-50 text-brand-primary' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'}">
@@ -145,7 +147,7 @@ export function renderNavbar() {
              </div>
              
              <!-- Mobile Menu Toggle (Simplified) -->
-             <button id="mobile-menu-toggle" class="md:hidden p-2 text-zinc-500">
+             <button id="mobile-menu-toggle" class="lg:hidden p-2 text-zinc-500">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
              </button>
           </div>
@@ -184,7 +186,22 @@ export function renderNavbar() {
       nav.querySelector('#mobile-menu').classList.add('hidden');
     });
     nav.querySelectorAll('#mobile-menu a').forEach(a => {
-      a.addEventListener('click', () => nav.querySelector('#mobile-menu').classList.add('hidden'));
+      a.addEventListener('click', (e) => {
+        if (a.getAttribute('href') === '#logout') {
+          e.preventDefault();
+          logout();
+        } else {
+          nav.querySelector('#mobile-menu').classList.add('hidden');
+        }
+      });
+    });
+
+    // Handle desktop logout separately since it's an <a> tag in the structure
+    nav.querySelectorAll('a[href="#logout"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+      });
     });
   }
 
