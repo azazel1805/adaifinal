@@ -54,9 +54,9 @@ export const renderVisualDictionary = () => {
         try {
             const pureBase64 = base64Image.split(',')[1];
             const mimeType = base64Image.split(';')[0].split(':')[1];
-            const resultText = await identifyObjectsInImage(pureBase64, mimeType);
-            const resultJson = JSON.parse(resultText);
-            setState({ identifiedObjects: resultJson, viewState: 'results' });
+            // service returns an array now
+            const identifiedObjects = await identifyObjectsInImage(pureBase64, mimeType);
+            setState({ identifiedObjects: identifiedObjects || [], viewState: 'results' });
         } catch (e) {
             console.error("Analysis error:", e);
             setState({ error: e.message || 'Analiz hatası.', viewState: 'captured' });

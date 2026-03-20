@@ -1615,7 +1615,7 @@ export const identifyObjectsInImage = async (base64Image, mimeType) => {
         },
     };
     const textPart = {
-        text: `Identify all the main, distinct entities in this image, including objects, people (man, woman, child), clothing, accessories, and body parts. For each entity, provide its common English name and its Turkish translation. Respond in JSON format according to the schema. Aim for 5-10 of the most prominent items.`,
+        text: `Analyze this image and identify the 10 most prominent, distinct entities—including objects, people, clothing, furniture, environment details, and architectural features. For each item, provide its common English name and its precise Turkish translation. Respond in valid JSON format. If no clear items are present, return an empty array.`,
     };
 
     try {
@@ -1626,7 +1626,14 @@ export const identifyObjectsInImage = async (base64Image, mimeType) => {
                 responseSchema: VISUAL_DICTIONARY_SCHEMA,
             }
         });
-        return response.text;
+
+        // Normalize response to ensure it's an array
+        let data = JSON.parse(response.text);
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+            // Check for common keys AI might use if it wraps the array
+            data = data.objects || data.entities || data.items || data.identifiedObjects || Object.values(data).find(Array.isArray) || [];
+        }
+        return Array.isArray(data) ? data : [];
     } catch (error) {
         console.error("Error identifying objects in image:", error);
         throw new Error("Görseldeki nesneler tanımlanırken bir hata oluştu.");
