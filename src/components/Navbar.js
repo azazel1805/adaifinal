@@ -41,7 +41,8 @@ const MENU_STRUCTURE = [
       { id: 'podcast_maker', label: 'Podcast Oluşturucu', icon: '🎙️' },
       { id: 'essay_outliner', label: 'Essay Taslak', icon: '📄' },
       { id: 'speaking_simulator', label: 'Konuşma Simülatörü', icon: '🗣️' },
-      { id: 'shadowing_lab', label: 'Shadowing Lab', icon: '👥' }
+      { id: 'shadowing_lab', label: 'Shadowing Lab', icon: '👥' },
+      { id: 'visual_dictionary', label: 'Görsel Sözlük', icon: '📸' }
     ]
   },
   {
