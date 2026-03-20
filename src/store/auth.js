@@ -33,8 +33,10 @@ export const initAuth = () => {
                     photoURL: currentUser.photoURL,
                     createdAt: serverTimestamp(),
                     subscription: {
-                        status: 'active',
-                        plan: 'free'
+                        status: 'expired',
+                        plan: 'inactive',
+                        startDate: null,
+                        endDate: null
                     }
                 });
             }
@@ -80,9 +82,15 @@ export const logout = async () => {
 };
 
 export const isSubscribed = (userProfile) => {
-    return (
-        !!userProfile &&
-        userProfile.subscription?.status === 'active' &&
-        userProfile.subscription.endDate.toDate() > new Date()
-    );
+    if (!userProfile || !userProfile.subscription) return false;
+    if (userProfile.subscription.status !== 'active') return false;
+    if (!userProfile.subscription.endDate) return false;
+    
+    // endDate matches Firestore Timestamp toDate()
+    try {
+        const end = userProfile.subscription.endDate.toDate ? userProfile.subscription.endDate.toDate() : new Date(userProfile.subscription.endDate);
+        return end > new Date();
+    } catch(e) {
+        return false;
+    }
 };

@@ -49,7 +49,7 @@ import { initPerformanceStats } from './utils/performance';
 import { listenToFriendships, listenToPendingRequests } from './services/socialService';
 import { renderLoginPage } from './pages/LoginPage';
 import { renderSignUpPage } from './pages/SignUpPage';
-import { initAuth } from './store/auth';
+import { initAuth, isSubscribed } from './store/auth';
 import { initHistory } from './store/history';
 import { initChallenge } from './store/challenge';
 import { initVocabulary } from './store/vocabulary';
@@ -222,7 +222,34 @@ function render() {
     mainArea.appendChild(scrollArea);
     shell.appendChild(mainArea);
 
-    // Page content
+    // Subscription check for premium pages
+    const isPremiumPage = !['dashboard', 'index', 'profile', 'admin'].includes(state.activeTab);
+    const hasAccess = isSubscribed(state.userProfile);
+    const isAdmin = ['admin@adai.com', 'onurtosuner@gmail.com'].includes(state.user?.email?.toLowerCase());
+
+    if (isPremiumPage && !hasAccess && !isAdmin) {
+        contentArea.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-24 text-center space-y-8 animate-fadeIn">
+                <div class="w-24 h-24 bg-brand-primary/10 rounded-full flex items-center justify-center text-5xl">🔒</div>
+                <div class="space-y-2">
+                    <h2 class="text-3xl font-black text-zinc-900 italic uppercase">Abonelik Gerekli</h2>
+                    <p class="text-zinc-500 max-w-md mx-auto font-medium">Bu özelliği kullanabilmek için aktif bir aboneliğinizin olması gerekmektedir. Shopier üzerinden lisans satın alarak hesabınızı aktif edebilirsiniz.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="https://www.shopier.com/ADAI" target="_blank" class="px-8 py-4 bg-brand-primary text-white font-black rounded-2xl shadow-lg shadow-brand-primary/20 hover:-translate-y-1 transition-all uppercase tracking-tighter">Şimdi Lisans Al</a>
+                    <button onclick="window.location.hash='dashboard'" class="px-8 py-4 bg-zinc-100 text-zinc-600 font-black rounded-2xl hover:bg-zinc-200 transition-all uppercase tracking-tighter">Ana Sayfaya Dön</button>
+                </div>
+                <p class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-8 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-zinc-200 rounded-full"></span>
+                    Lisans aldıysanız aktivasyon için lütfen bekleyin veya admin ile iletişime geçin.
+                </p>
+            </div>
+        `;
+        root.appendChild(shell);
+        root.appendChild(renderBottomNav(state.activeTab));
+        return;
+    }
+
     const onAskTutor = (ctx) => {
         window.location.hash = 'tutor';
         localStorage.setItem('adai_tutor_context', ctx);

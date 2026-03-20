@@ -1,14 +1,27 @@
 import store from '../store/index';
+import { 
+    getAllUsers, 
+    activateUserSubscription, 
+    deactivateUserSubscription 
+} from '../services/adminService';
 
 export const renderAdminPage = () => {
     const container = document.createElement('div');
     container.className = 'max-w-[1440px] mx-auto space-y-10';
 
     let state = {
+        users: [],
         selectedUser: null,
         userData: null,
         isLoading: false
     };
+
+    const loadUsers = async () => {
+        const users = await getAllUsers();
+        setState({ users });
+    };
+
+    loadUsers();
 
     const setState = (newState) => {
         state = { ...state, ...newState };
@@ -40,7 +53,8 @@ export const renderAdminPage = () => {
 
     const render = () => {
         const { user: currentUser } = store.getState();
-        const users = []; // Mock users table in Vanilla JS
+        const users = state.users;
+        const selectedUserData = users.find(u => u.uid === state.selectedUser);
         const email = currentUser?.email?.toLowerCase();
         if (email !== 'admin@adai.com' && email !== 'onurtosuner@gmail.com' && currentUser?.uid !== 'admin') {
             container.innerHTML = `
@@ -65,13 +79,41 @@ export const renderAdminPage = () => {
                     </h2>
                     <p class="text-slate-500 dark:text-slate-400 font-medium mb-8">Tüm kullanıcıların verilerini ve ilerlemelerini buradan takip edebilirsiniz.</p>
 
-                    <div class="flex flex-col sm:flex-row items-center gap-6">
                         <select id="user-select" class="w-full max-w-sm p-6 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-[2rem] focus:ring-4 focus:ring-brand-primary/20 focus:border-brand-primary focus:outline-none font-black text-slate-900 dark:text-white transition-all shadow-inner uppercase tracking-widest text-xs">
                             <option value="">KULLANICI SEÇİN...</option>
-                            ${otherUsers.map(u => `<option value="${u.uid}" ${state.selectedUser === u.uid ? 'selected' : ''}>${u.email} (${u.uid.slice(0, 6)})</option>`).join('')}
+                            ${users.map(u => `<option value="${u.uid}" ${state.selectedUser === u.uid ? 'selected' : ''}>${u.email} (${u.uid.slice(0, 6)})</option>`).join('')}
                         </select>
                         ${state.isLoading ? '<span class="text-xs font-black text-brand-primary animate-pulse uppercase tracking-[0.2em]">VERİLER ALINIYOR...</span>' : ''}
                     </div>
+
+                    ${selectedUserData ? `
+                         <div class="mt-10 p-8 bg-zinc-50 dark:bg-zinc-800/50 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-700">
+                             <h4 class="text-xs font-black text-zinc-400 uppercase tracking-widest mb-6">🔑 ABONELİK YÖNETİMİ</h4>
+                             <div class="flex flex-wrap items-center gap-4">
+                                 <div class="px-6 py-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
+                                     <span class="block text-[10px] font-black text-zinc-400 uppercase mb-1">DURUM</span>
+                                     <span class="text-sm font-black ${selectedUserData.subscription?.status === 'active' ? 'text-green-500' : 'text-red-500'} uppercase italic">${selectedUserData.subscription?.status || 'Bilinmiyor'}</span>
+                                 </div>
+                                 <div class="px-6 py-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
+                                     <span class="block text-[10px] font-black text-zinc-400 uppercase mb-1">PLAN</span>
+                                     <span class="text-sm font-black text-zinc-700 dark:text-zinc-200 uppercase italic">${selectedUserData.subscription?.plan || 'YOK'}</span>
+                                 </div>
+                                 ${selectedUserData.subscription?.endDate ? `
+                                     <div class="px-6 py-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
+                                         <span class="block text-[10px] font-black text-zinc-400 uppercase mb-1">BİTİŞ</span>
+                                         <span class="text-sm font-black text-zinc-700 dark:text-zinc-200 italic">${selectedUserData.subscription.endDate.toDate().toLocaleDateString('tr-TR')}</span>
+                                     </div>
+                                 ` : ''}
+                             </div>
+                             
+                             <div class="flex flex-wrap gap-2 mt-6">
+                                 <button class="sub-action-btn bg-brand-primary hover:bg-brand-secondary text-white text-[10px] font-black px-4 py-2 rounded-xl transition-all" data-uid="${selectedUserData.uid}" data-action="1">1 AY SÜRE EKLE</button>
+                                 <button class="sub-action-btn bg-brand-primary hover:bg-brand-secondary text-white text-[10px] font-black px-4 py-2 rounded-xl transition-all" data-uid="${selectedUserData.uid}" data-action="3">3 AY SÜRE EKLE</button>
+                                 <button class="sub-action-btn bg-brand-primary hover:bg-brand-secondary text-white text-[10px] font-black px-4 py-2 rounded-xl transition-all" data-uid="${selectedUserData.uid}" data-action="12">1 YIL SÜRE EKLE</button>
+                                 <button class="sub-action-btn bg-red-500 hover:bg-red-600 text-white text-[10px] font-black px-4 py-2 rounded-xl transition-all" data-uid="${selectedUserData.uid}" data-action="0">DONDUR/İPTAL</button>
+                             </div>
+                         </div>
+                    ` : ''}
                 </div>
 
                 ${state.selectedUser && state.userData && !state.isLoading ? `
@@ -165,6 +207,29 @@ export const renderAdminPage = () => {
                 else setState({ userData: null });
             };
         }
+
+        container.querySelectorAll('.sub-action-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const { uid, action } = btn.dataset;
+                const months = parseInt(action);
+                
+                if (months > 0) {
+                    const ok = await activateUserSubscription(uid, months);
+                    if (ok) {
+                        alert("Kullanıcı başarıyla aktif edildi!");
+                        loadUsers(); // Refresh list to update status in UI
+                    } else {
+                        alert("Aktivasyon başarısız oldu.");
+                    }
+                } else {
+                    const ok = await deactivateUserSubscription(uid);
+                    if (ok) {
+                        alert("Kullanıcı aboneliği iptal edildi.");
+                        loadUsers();
+                    }
+                }
+            });
+        });
     };
 
     render();
