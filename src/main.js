@@ -217,7 +217,7 @@ function render() {
 
     const contentArea = document.createElement('div');
     contentArea.id = 'content-area';
-    contentArea.className = 'max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 min-h-full';
+    contentArea.className = 'max-w-[1440px] mx-auto w-full p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 min-h-full';
     scrollArea.appendChild(contentArea);
     mainArea.appendChild(scrollArea);
     shell.appendChild(mainArea);

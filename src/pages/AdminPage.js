@@ -2,7 +2,7 @@ import store from '../store/index';
 
 export const renderAdminPage = () => {
     const container = document.createElement('div');
-    container.className = 'max-w-7xl mx-auto space-y-10';
+    container.className = 'max-w-[1440px] mx-auto space-y-10';
 
     let state = {
         selectedUser: null,

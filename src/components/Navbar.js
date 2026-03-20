@@ -88,9 +88,9 @@ export function renderNavbar() {
     const activeTab = store.getState().activeTab;
 
     nav.innerHTML = `
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20">
-          <div class="flex items-center gap-4 lg:gap-8">
+          <div class="flex items-center gap-4 lg:gap-6">
             <!-- Logo area -->
             <div class="flex flex-col cursor-pointer" onclick="window.location.hash='dashboard'">
               <span class="text-2xl font-black tracking-tighter text-zinc-900">ADA<span class="text-brand-primary">I</span></span>
@@ -98,7 +98,7 @@ export function renderNavbar() {
             </div>
 
             <!-- Desktop Nav -->
-            <div class="hidden lg:flex items-center gap-2 xl:gap-4 h-full">
+            <div class="hidden lg:flex items-center gap-1.5 xl:gap-3 h-full">
               ${MENU_STRUCTURE.map(group => {
       if (!group.items) {
         const isActive = activeTab === group.id;
