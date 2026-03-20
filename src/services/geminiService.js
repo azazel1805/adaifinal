@@ -1615,7 +1615,11 @@ export const identifyObjectsInImage = async (base64Image, mimeType) => {
         },
     };
     const textPart = {
-        text: `Analyze this image and identify the 10 most prominent, distinct entities—including objects, people, clothing, furniture, environment details, and architectural features. For each item, provide its common English name and its precise Turkish translation. Respond in valid JSON format. If no clear items are present, return an empty array.`,
+        text: `Analyze this image and identify at least 5-10 distinct entities (objects, people, clothing, furniture, or features).
+For each item, provide its English name ("englishName") and its Turkish translation ("turkishName").
+Return the results as a JSON array of objects.
+Example format: [{"englishName": "Chair", "turkishName": "Sandalye"}, ...]
+If no items are found, return an empty array [].`,
     };
 
     try {
@@ -1629,8 +1633,15 @@ export const identifyObjectsInImage = async (base64Image, mimeType) => {
 
         // Normalize response to ensure it's an array
         let data = JSON.parse(response.text);
+        
+        // If data is an object but not an array, try to find the array within it
         if (data && typeof data === 'object' && !Array.isArray(data)) {
-            data = data.objects || data.entities || data.items || data.identifiedObjects || Object.values(data).find(Array.isArray) || [];
+            data = data.objects || data.entities || data.items || data.identifiedObjects || data.data || Object.values(data).find(Array.isArray) || [];
+        }
+        
+        // Special case: if it's still an object and not an array, maybe it returned { "en": "tr" } pairs
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+            data = Object.entries(data).map(([en, tr]) => ({ englishName: en, turkishName: tr }));
         }
 
         if (!Array.isArray(data)) return [];

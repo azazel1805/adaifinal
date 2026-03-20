@@ -65,11 +65,32 @@ export const renderVisualDictionary = () => {
 
     const captureImage = () => {
         if (videoEl && canvasEl) {
-            canvasEl.width = videoEl.videoWidth;
-            canvasEl.height = videoEl.videoHeight;
+            const MAX_WIDTH = 1280;
+            const MAX_HEIGHT = 1280;
+
+            let w = videoEl.videoWidth;
+            let h = videoEl.videoHeight;
+
+            // Maintain aspect ratio while capping at MAX_WIDTH / MAX_HEIGHT
+            if (w > h) {
+                if (w > MAX_WIDTH) {
+                    h = Math.floor(h * (MAX_WIDTH / w));
+                    w = MAX_WIDTH;
+                }
+            } else {
+                if (h > MAX_HEIGHT) {
+                    w = Math.floor(w * (MAX_HEIGHT / h));
+                    h = MAX_HEIGHT;
+                }
+            }
+
+            canvasEl.width = w;
+            canvasEl.height = h;
+
             const ctx = canvasEl.getContext('2d');
-            ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
-            const dataUrl = canvasEl.toDataURL('image/jpeg', 0.9);
+            ctx.drawImage(videoEl, 0, 0, w, h);
+
+            const dataUrl = canvasEl.toDataURL('image/jpeg', 0.85); // 0.85 is a good balance between size and quality
             setState({ capturedImage: dataUrl, viewState: 'captured' });
             stopCamera();
             analyzeImage(dataUrl);
