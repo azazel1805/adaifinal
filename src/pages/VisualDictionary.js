@@ -194,9 +194,8 @@ export const renderVisualDictionary = () => {
 
                                  ${state.viewState === 'results' ? `
                                     <div class="grid grid-cols-1 gap-4">
-                                        ${state.identifiedObjects.length > 0 ? state.identifiedObjects
-                                            .filter(obj => obj && obj.englishName && obj.turkishName)
-                                            .map(obj => `
+                                        ${state.identifiedObjects.length > 0 ? (
+                                            state.identifiedObjects.map(obj => `
                                             <div class="group relative bg-zinc-50 dark:bg-zinc-800/50 p-8 rounded-[2.5rem] border border-transparent hover:border-brand-primary/20 hover:bg-white dark:hover:bg-zinc-800 transition-all flex justify-between items-center shadow-sm hover:shadow-xl">
                                                 <div class="space-y-1">
                                                     <p class="font-black text-zinc-900 dark:text-white text-2xl capitalize tracking-tighter italic">${obj.englishName}</p>
@@ -211,7 +210,8 @@ export const renderVisualDictionary = () => {
                                                 
                                                 <div class="absolute -z-10 bottom-0 right-0 p-2 text-6xl opacity-0 group-hover:opacity-[0.03] transition-opacity select-none capitalize font-black">${obj.englishName}</div>
                                             </div>
-                                        `).join('') : `
+                                        `).join('')
+                                        ) : `
                                             <div class="text-center py-20 bg-zinc-50 dark:bg-zinc-800/50 rounded-[3rem] border-4 border-dashed border-zinc-100 dark:border-zinc-800">
                                                 <div class="text-6xl mb-6">🧐</div>
                                                 <p class="text-zinc-500 font-bold italic">Üzgünüz, belirlenmiş nesne bulunamadı.</p>
