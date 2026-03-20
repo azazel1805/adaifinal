@@ -5,7 +5,8 @@ const CACHE_NAME = 'adai-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/adai-favicon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
   '/manifest.json'
 ];
 
