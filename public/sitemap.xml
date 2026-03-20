@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Ana Sayfa -->
+  <url>
+    <loc>https://adaiai.netlify.app/</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>1.00</priority>
+  </url>
+  
+  <!-- Uzman Analizleri (Kategori) -->
+  <url>
+    <loc>https://adaiai.netlify.app/#analyzer</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://adaiai.netlify.app/#deconstruction</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://adaiai.netlify.app/#diagrammer</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Bilişsel Lab (Kategori) -->
+  <url>
+    <loc>https://adaiai.netlify.app/#tutor</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://adaiai.netlify.app/#placement_test</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dil Çekirdeği (Gramer & Kelime) -->
+  <url>
+    <loc>https://adaiai.netlify.app/#grammar_library</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://adaiai.netlify.app/#vocabulary</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Oyunlar -->
+  <url>
+    <loc>https://adaiai.netlify.app/#games</loc>
+    <lastmod>2024-03-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+</urlset>
