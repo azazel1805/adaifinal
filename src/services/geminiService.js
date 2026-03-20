@@ -1615,7 +1615,7 @@ export const identifyObjectsInImage = async (base64Image, mimeType) => {
         },
     };
     const textPart = {
-        text: `Identify the main, distinct objects in this image. For each object, provide its common English name and its Turkish translation. Respond in JSON format according to the schema. Focus on 5-10 of the most prominent objects.`,
+        text: `Identify all the main, distinct entities in this image, including objects, people (man, woman, child), clothing, accessories, and body parts. For each entity, provide its common English name and its Turkish translation. Respond in JSON format according to the schema. Aim for 5-10 of the most prominent items.`,
     };
 
     try {
