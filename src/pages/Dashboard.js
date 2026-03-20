@@ -22,12 +22,11 @@ export const renderDashboard = () => {
 
     let modalState = {
       tab: 'activity', // 'activity' | 'topic'
-      topic: 'analyze',
+      topic: 'analyzer',
       target: 3
     };
 
     const activityGoals = [
-      { description: '3 soru analiz et', type: 'analyze', target: 3 },
       { description: '1 konuşma pratiği yap', type: 'chat', target: 1 },
       { description: '1 cümle sıralama alıştırması çöz', type: 'sentence_ordering', target: 1 },
       { description: '3 yeni kelime ara', type: 'dictionary', target: 3 },
@@ -36,7 +35,6 @@ export const renderDashboard = () => {
 
     const topicGoals = [
       { label: 'Metin Analizi Yap', type: 'analyzer' },
-      { label: 'Soru Analiz Et', type: 'analyze' },
       { label: 'Bağlam Analizci', type: 'cohesion_analyzer' },
     ];
 

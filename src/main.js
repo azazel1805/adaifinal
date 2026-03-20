@@ -4,7 +4,6 @@ import Router from './router';
 import { renderDashboard } from './pages/Dashboard';
 import { renderNavbar } from './components/Navbar';
 import { renderAITutor } from './pages/AITutor';
-import { renderQuestionAnalyzer } from './pages/QuestionAnalyzer';
 import { renderPassageDeconstruction } from './pages/PassageDeconstruction';
 import { renderReadingPractice } from './pages/ReadingPractice';
 import { renderWritingAssistant } from './pages/WritingAssistant';
@@ -276,8 +275,6 @@ function render() {
         case 'tutor':
         case 'chat':
             contentArea.appendChild(renderAITutor()); break;
-        case 'analyzer':
-            contentArea.appendChild(renderQuestionAnalyzer()); break;
         case 'deconstruction':
             contentArea.appendChild(renderPassageDeconstruction()); break;
         case 'writing':

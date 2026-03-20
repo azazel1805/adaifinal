@@ -10,7 +10,6 @@ const MENU_STRUCTURE = [
     items: [
       { id: 'deconstruction', label: 'Metin Deşifresi', icon: '🔍' },
       { id: 'diagrammer', label: 'Cümle Görselleştirici', icon: '📈' },
-      { id: 'analyzer', label: 'Metin Analizci', icon: '📝' },
       { id: 'reading', label: 'Okuma Analizi', icon: '📖' },
       { id: 'translation_analyst', label: 'Çeviri Analizci', icon: '🔄' },
       { id: 'pragmatic_analyzer', label: 'Pragmatik Analizci', icon: '🎭' },
