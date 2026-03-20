@@ -15,6 +15,7 @@ export const initVocabulary = () => {
 };
 
 export const addWord = (word, meaning) => {
+    if (!word || !meaning) return;
     const { vocabularyList } = store.getState();
     const normalizedWord = word.toLowerCase().trim();
 
@@ -36,19 +37,21 @@ export const addWord = (word, meaning) => {
 };
 
 export const removeWord = (word) => {
+    if (!word) return;
     const { vocabularyList } = store.getState();
     const normalizedWord = word.toLowerCase().trim();
-    const newList = vocabularyList.filter(item => item.word.toLowerCase() !== normalizedWord);
+    const newList = vocabularyList.filter(item => item.word && item.word.toLowerCase() !== normalizedWord);
 
     store.setState({ vocabularyList: newList });
     localStorage.setItem(getVocabularyKey(), JSON.stringify(newList));
 };
 
 export const isWordSaved = (word) => {
+    if (!word) return false;
     const { vocabularyList } = store.getState();
     if (!vocabularyList) return false;
-    const normalizedWord = word.toLowerCase().trim();
-    return vocabularyList.some(item => item.word.toLowerCase() === normalizedWord);
+    const normalizedWord = String(word).toLowerCase().trim();
+    return vocabularyList.some(item => item.word && String(item.word).toLowerCase() === normalizedWord);
 };
 
 export const updateSRS = (wordId, success) => {

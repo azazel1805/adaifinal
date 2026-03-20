@@ -194,7 +194,9 @@ export const renderVisualDictionary = () => {
 
                                  ${state.viewState === 'results' ? `
                                     <div class="grid grid-cols-1 gap-4">
-                                        ${state.identifiedObjects.length > 0 ? state.identifiedObjects.map(obj => `
+                                        ${state.identifiedObjects.length > 0 ? state.identifiedObjects
+                                            .filter(obj => obj && obj.englishName && obj.turkishName)
+                                            .map(obj => `
                                             <div class="group relative bg-zinc-50 dark:bg-zinc-800/50 p-8 rounded-[2.5rem] border border-transparent hover:border-brand-primary/20 hover:bg-white dark:hover:bg-zinc-800 transition-all flex justify-between items-center shadow-sm hover:shadow-xl">
                                                 <div class="space-y-1">
                                                     <p class="font-black text-zinc-900 dark:text-white text-2xl capitalize tracking-tighter italic">${obj.englishName}</p>
