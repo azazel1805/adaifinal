@@ -1630,10 +1630,22 @@ export const identifyObjectsInImage = async (base64Image, mimeType) => {
         // Normalize response to ensure it's an array
         let data = JSON.parse(response.text);
         if (data && typeof data === 'object' && !Array.isArray(data)) {
-            // Check for common keys AI might use if it wraps the array
             data = data.objects || data.entities || data.items || data.identifiedObjects || Object.values(data).find(Array.isArray) || [];
         }
-        return Array.isArray(data) ? data : [];
+
+        if (!Array.isArray(data)) return [];
+
+        // Fuzzy property mapping - Extremely Robust
+        return data.map(item => {
+            if (typeof item === 'string') return { englishName: item, turkishName: '' };
+            if (!item || typeof item !== 'object') return null;
+
+            const en = item.englishName || item.english || item.name || item.word || item.en || item.English || item.Name;
+            const tr = item.turkishName || item.turkish || item.translation || item.meaning || item.tr || item.Turkish || item.Meaning;
+            
+            if (en) return { englishName: String(en), turkishName: String(tr || '') };
+            return null;
+        }).filter(item => item && item.englishName && String(item.englishName).toLowerCase() !== 'undefined');
     } catch (error) {
         console.error("Error identifying objects in image:", error);
         throw new Error("Görseldeki nesneler tanımlanırken bir hata oluştu.");
