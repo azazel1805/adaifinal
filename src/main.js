@@ -82,7 +82,6 @@ const PAGE_TITLES = {
     diagrammer: 'Cümle Görselleştirici | ADAI',
     translation_analyst: 'Çeviri Analizci | ADAI',
     pragmatic_analyzer: 'Pragmatik Analizci | ADAI',
-    analyzer: 'Metin Analizci | ADAI',
     reading: 'Okuma Analizi | ADAI',
     cohesion_analyzer: 'Bağlam Analizci | ADAI',
     sentence_ordering: 'Cümle Sıralama | ADAI',
@@ -120,7 +119,7 @@ if (!store.getState().theme) store.setState({ theme: currentTheme });
 // ─── Routes ───────────────────────────────────────────────────────
 const routes = [
     { path: 'dashboard' }, { path: 'index' }, { path: 'placement_test' },
-    { path: 'chat' }, { path: 'analyzer' }, { path: 'deconstruction' },
+    { path: 'chat' }, { path: 'deconstruction' },
     { path: 'reading' }, { path: 'writing' }, { path: 'vocabulary' },
     { path: 'visual_dictionary' }, { path: 'dictionary' }, { path: 'cohesion_analyzer' },
     { path: 'listening' }, { path: 'speaking_simulator' }, { path: 'sentence_ordering' },

@@ -1,4 +1,4 @@
-import { parseGeneratedQuestions, parseClozeTestJsonResponse } from "../utils/questionParser";
+// Unused imports from questionParser removed
 
 const VITE_OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.VITE_API_KEY;
 

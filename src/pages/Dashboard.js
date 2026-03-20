@@ -34,7 +34,6 @@ export const renderDashboard = () => {
     ];
 
     const topicGoals = [
-      { label: 'Metin Analizi Yap', type: 'analyzer' },
       { label: 'Bağlam Analizci', type: 'cohesion_analyzer' },
     ];
 
