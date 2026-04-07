@@ -1,5 +1,27 @@
 import './index.css';
 import store from './store/index';
+
+// ─── Web Access Restriction ──────────────────────────────────────
+const isCapacitor = window.hasOwnProperty('Capacitor');
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+if (!isCapacitor && !isLocalhost) {
+    document.body.innerHTML = `
+        <div class="flex flex-col items-center justify-center min-h-screen bg-zinc-50 p-6 text-center">
+            <div class="w-24 h-24 bg-brand-primary/10 rounded-full flex items-center justify-center text-5xl mb-8">📱</div>
+            <h1 class="text-3xl font-black text-zinc-900 italic uppercase tracking-tighter mb-4">ADAI<br/><span class="text-brand-primary uppercase italic">Encyclopedia</span></h1>
+            <p class="text-zinc-500 max-w-sm font-medium leading-relaxed">
+                Bu platformun web sürümü güvenliğiniz için erişime kapatılmıştır. 
+                Lütfen deneyiminize <b>ADAI Mobil Uygulaması</b> üzerinden devam edin.
+            </p>
+            <div class="mt-12 text-[10px] text-zinc-300 font-bold uppercase tracking-widest">
+                © 2024 ADAI AI • STANDALONE VERSION
+            </div>
+        </div>
+    `;
+    // Stop execution
+    throw new Error("Web Access Restricted");
+}
 import Router from './router';
 import { renderDashboard } from './pages/Dashboard';
 import { renderNavbar } from './components/Navbar';
