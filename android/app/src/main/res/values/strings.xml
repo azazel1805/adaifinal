@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ADAI Encyclopedia</string>
+    <string name="title_activity_main">ADAI Encyclopedia</string>
+    <string name="package_name">com.adai.encyclopedia</string>
+    <string name="custom_url_scheme">com.adai.encyclopedia</string>
+</resources>

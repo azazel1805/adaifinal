@@ -29,20 +29,20 @@ export class Store {
 }
 
 const globalStore = new Store({
-    user: null,
-    userProfile: null,
-    loading: true,
+    user: { uid: 'guest-id', email: 'guest@adai.com', displayName: 'Misafir Kullanıcı' },
+    userProfile: { uid: 'guest-id', email: 'guest@adai.com', displayName: 'Misafir Kullanıcı', subscription: { status: 'active', plan: 'Lifetime', endDate: '2099-12-31' } },
+    loading: false,
     theme: localStorage.getItem('theme-mode') || 'light',
     activeTab: 'dashboard',
     isMenuOpen: false,
     vocabularyList: JSON.parse(localStorage.getItem('vocabulary-list')) || [],
     unlockedAchievements: JSON.parse(localStorage.getItem('unlocked-achievements')) || [],
     openAccordions: JSON.parse(localStorage.getItem('open-accordions')) || [],
-    history: [], // Added for QuestionAnalyzer
-    examHistory: [], // Added for Mock Exams
-    performanceStats: {}, // Added for Performance Tracking
-    initialChatMessage: null, // Initial message for AITutor from other pages
-    weakWords: [], // Added for VocabularyTrainer
+    history: [], 
+    examHistory: [], 
+    performanceStats: {}, 
+    initialChatMessage: null, 
+    weakWords: [], 
     challengeState: JSON.parse(localStorage.getItem('challenge-state')) || {
         currentChallenge: null,
         lastCompletedDate: null,

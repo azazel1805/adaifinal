@@ -26,7 +26,6 @@ import { renderDictionary } from './pages/Dictionary';
 import { renderVisualDictionary } from './pages/VisualDictionary';
 import { renderParagraphCohesionAnalyzer } from './pages/ParagraphCohesionAnalyzer';
 import { renderHistory } from './pages/History';
-import { renderAdminPage } from './pages/AdminPage';
 import { renderNewsReader } from './pages/NewsReader';
 import { renderConceptWeaver } from './pages/ConceptWeaver';
 import { renderPodcastMaker } from './pages/PodcastMaker';
@@ -40,15 +39,10 @@ import { renderVisualReading } from './pages/VisualReading';
 import { renderCreativeWriting } from './pages/CreativeWriting';
 import { renderEssayOutliner } from './pages/EssayOutliner';
 import { renderProfile } from './pages/Profile';
-import { renderGlobalChat } from './pages/GlobalChat';
 import { renderShadowingLab } from './pages/ShadowingLab';
-import { renderWordDuel } from './pages/WordDuel';
 import { renderOxfordTrainer } from './pages/OxfordTrainer';
 import { initPerformanceStats } from './utils/performance';
-import { listenToFriendships, listenToPendingRequests } from './services/socialService';
-import { renderLoginPage } from './pages/LoginPage';
-import { renderSignUpPage } from './pages/SignUpPage';
-import { initAuth, isSubscribed } from './store/auth';
+import { isSubscribed } from './store/auth';
 import { initHistory } from './store/history';
 import { initChallenge } from './store/challenge';
 import { initVocabulary } from './store/vocabulary';
@@ -88,14 +82,11 @@ const PAGE_TITLES = {
     dialogue_completion: 'Diyalog Tamamlama | ADAI',
     history: 'Geçmiş | ADAI',
     profile: 'Profil | ADAI',
-    global_chat: 'Global Chat | ADAI',
     admin: 'Yönetim | ADAI',
     oxford_trainer: 'Oxford 5000 | ADAI',
 };
 
 // ─── Init ─────────────────────────────────────────────────────────
-initAuth();
-
 initHistory();
 initChallenge();
 initPdfExam();
@@ -106,10 +97,7 @@ initPerformanceStats();
 const { user } = store.getState();
 const weakWords = JSON.parse(localStorage.getItem(`weak-words-list-${user?.uid || 'guest'}`)) || [];
 store.setState({ weakWords });
-
-// Social Listeners
-listenToFriendships((friends) => store.setState({ friends }));
-listenToPendingRequests((pendingRequests) => store.setState({ pendingRequests }));
+// Social Listeners removed (Firebase)
 
 // Apply theme
 const currentTheme = store.getState().theme || 'light';
@@ -124,7 +112,7 @@ const routes = [
     { path: 'visual_dictionary' }, { path: 'dictionary' }, { path: 'cohesion_analyzer' },
     { path: 'listening' }, { path: 'speaking_simulator' }, { path: 'sentence_ordering' },
     { path: 'dialogue_completion' }, { path: 'exams' }, { path: 'history' },
-    { path: 'admin' }, { path: 'news_reader' }, { path: 'grammar_library' },
+    { path: 'news_reader' }, { path: 'grammar_library' },
     { path: 'basics' }, { path: 'physical_description' }, { path: 'handwriting_converter' },
     { path: 'tenses' }, { path: 'visual_reading' }, { path: 'creative_writing' },
     { path: 'essay_outliner' }, { path: 'podcast_maker' }, { path: 'crossword' },
@@ -133,8 +121,8 @@ const routes = [
     { path: 'phrasal_verb_deconstructor' }, { path: 'diagrammer' },
     { path: 'translation_analyst' }, { path: 'pragmatic_analyzer' },
     { path: 'pdf_importer' }, { path: 'skill_tree' }, { path: 'planner' }, { path: 'tutor' },
-    { path: 'profile' }, { path: 'global_chat' }, { path: 'shadowing_lab' }, { path: 'word_duel' },
-    { path: 'login' }, { path: 'oxford_trainer' }
+    { path: 'profile' }, { path: 'shadowing_lab' },
+    { path: 'oxford_trainer' }
 ];
 
 new Router(routes);
@@ -177,21 +165,7 @@ function render() {
         return;
     }
 
-    if (!state.user) {
-        root.innerHTML = '';
-        if (state.activeTab === 'signup') {
-            root.appendChild(renderSignUpPage());
-        } else {
-            root.appendChild(renderLoginPage());
-        }
-        return;
-    }
-
-    // Redirect logged-in users away from login/signup
-    if (state.activeTab === 'login' || state.activeTab === 'signup') {
-        window.location.hash = 'dashboard';
-        return;
-    }
+    // No auth redirection needed anymore
 
     root.innerHTML = '';
 
@@ -220,33 +194,7 @@ function render() {
     mainArea.appendChild(scrollArea);
     shell.appendChild(mainArea);
 
-    // Subscription check for premium pages
-    const isPremiumPage = !['dashboard', 'index', 'profile', 'admin'].includes(state.activeTab);
-    const hasAccess = isSubscribed(state.userProfile);
-    const isAdmin = ['admin@adai.com', 'onurtosuner@gmail.com'].includes(state.user?.email?.toLowerCase());
-
-    if (isPremiumPage && !hasAccess && !isAdmin) {
-        contentArea.innerHTML = `
-            <div class="flex flex-col items-center justify-center py-24 text-center space-y-8 animate-fadeIn">
-                <div class="w-24 h-24 bg-brand-primary/10 rounded-full flex items-center justify-center text-5xl">🔒</div>
-                <div class="space-y-2">
-                    <h2 class="text-3xl font-black text-zinc-900 italic uppercase">Abonelik Gerekli</h2>
-                    <p class="text-zinc-500 max-w-md mx-auto font-medium">Bu özelliği kullanabilmek için aktif bir aboneliğinizin olması gerekmektedir. Shopier üzerinden lisans satın alarak hesabınızı aktif edebilirsiniz.</p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href="https://www.shopier.com/onurtosuner/45399343" target="_blank" class="px-8 py-4 bg-brand-primary text-white font-black rounded-2xl shadow-lg shadow-brand-primary/20 hover:-translate-y-1 transition-all uppercase tracking-tighter">Şimdi Lisans Al</a>
-                    <button onclick="window.location.hash='dashboard'" class="px-8 py-4 bg-zinc-100 text-zinc-600 font-black rounded-2xl hover:bg-zinc-200 transition-all uppercase tracking-tighter">Ana Sayfaya Dön</button>
-                </div>
-                <p class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-8 flex items-center gap-2">
-                    <span class="w-2 h-2 bg-zinc-200 rounded-full"></span>
-                    Lisans aldıysanız aktivasyon için lütfen bekleyin veya admin ile iletişime geçin.
-                </p>
-            </div>
-        `;
-        root.appendChild(shell);
-        root.appendChild(renderBottomNav(state.activeTab));
-        return;
-    }
+    // All pages are accessible in standalone mode
 
     const onAskTutor = (ctx) => {
         window.location.hash = 'tutor';
@@ -332,16 +280,10 @@ function render() {
             contentArea.appendChild(renderSentenceDiagrammer()); break;
         case 'translation_analyst':
             contentArea.appendChild(renderTranslationAnalyst()); break;
-        case 'admin':
-            contentArea.appendChild(renderAdminPage()); break;
         case 'profile':
             contentArea.appendChild(renderProfile()); break;
-        case 'global_chat':
-            contentArea.appendChild(renderGlobalChat()); break;
         case 'shadowing_lab':
             contentArea.appendChild(renderShadowingLab()); break;
-        case 'word_duel':
-            contentArea.appendChild(renderWordDuel()); break;
         case 'oxford_trainer':
             contentArea.appendChild(renderOxfordTrainer()); break;
         default:

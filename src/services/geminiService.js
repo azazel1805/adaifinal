@@ -1,10 +1,6 @@
 // Unused imports from questionParser removed
 
-const VITE_OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.VITE_API_KEY;
-
-if (!VITE_OPENAI_API_KEY) {
-    throw new Error("VITE_OPENAI_API_KEY environment variable not set");
-}
+// API settings moved to callOpenAI to support both proxy and direct dev calls
 
 const OPENAI_CHAT_MODEL = 'gpt-4o-mini';
 const OPENAI_IMAGE_MODEL = 'gpt-image-1';
@@ -18,18 +14,48 @@ const Type = {
 };
 
 const callOpenAI = async (path, body) => {
-    const response = await fetch(`https://api.openai.com/v1/${path}`, {
+    const VITE_OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.VITE_API_KEY;
+    const isDev = import.meta.env.DEV;
+
+    // Use direct call ONLY in development AND if local key is available
+    // Recommended: Use Netlify CLI (netlify dev) to test proxy locally too.
+    if (isDev && VITE_OPENAI_API_KEY) {
+        const response = await fetch(`https://api.openai.com/v1/${path}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${VITE_OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`OpenAI API error (${response.status}): ${errorText}`);
+        }
+
+        return response.json();
+    }
+
+    // Production: Netlify Functions Proxy (Absolute URL required for Mobile)
+    const PROXY_BASE_URL = 'https://adai-official.netlify.app'; // Change this to your actual Netlify domain
+    const response = await fetch(`${PROXY_BASE_URL}/.netlify/functions/openai-proxy`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${VITE_OPENAI_API_KEY}`,
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ path, body }),
     });
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`OpenAI API error (${response.status}): ${errorText}`);
+        let errorData;
+        try {
+            errorData = JSON.parse(errorText);
+        } catch (e) {
+            errorData = { error: errorText };
+        }
+        throw new Error(errorData.error || `AI Proxy error (${response.status})`);
     }
 
     return response.json();

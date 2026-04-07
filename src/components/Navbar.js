@@ -1,5 +1,5 @@
 import store from '../store/index';
-import { logout } from '../store/auth';
+// Logout removed
 
 const MENU_STRUCTURE = [
   { id: 'dashboard', label: 'Ana Sayfa', icon: '🏠' },
@@ -57,15 +57,6 @@ const MENU_STRUCTURE = [
     ]
   },
   {
-    id: 'community',
-    label: 'Topluluk',
-    icon: '🌍',
-    items: [
-      { id: 'word_duel', label: 'Kelime Düellosu', icon: '⚔️' },
-      { id: 'global_chat', label: 'Küresel Sohbet', icon: '💬' }
-    ]
-  },
-  {
     id: 'profile',
     label: 'Profil',
     icon: '👤',
@@ -74,8 +65,7 @@ const MENU_STRUCTURE = [
       { id: 'skill_tree', label: 'Yetenek Ağacı', icon: '🌲' },
       { id: 'planner', label: 'Çalışma Planı', icon: '📅' },
       { id: 'history', label: 'Geçmiş', icon: '🕒' },
-      { id: 'admin', label: 'Yönetim', icon: '⚙️' },
-      { id: 'logout', label: 'Çıkış Yap', icon: '🚪' }
+      { id: 'admin', label: 'Yönetim', icon: '⚙️' }
     ]
   }
 ];
@@ -196,13 +186,7 @@ export function renderNavbar() {
       });
     });
 
-    // Handle desktop logout separately since it's an <a> tag in the structure
-    nav.querySelectorAll('a[href="#logout"]').forEach(a => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        logout();
-      });
-    });
+    // Desktop logout removed
   }
 
   store.subscribe(update);
