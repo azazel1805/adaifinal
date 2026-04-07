@@ -38,11 +38,15 @@ const callOpenAI = async (path, body) => {
     }
 
     // Production: Netlify Functions Proxy (Absolute URL required for Mobile)
-    const PROXY_BASE_URL = 'https://adai-official.netlify.app'; // Change this to your actual Netlify domain
+    // ÖNEMLİ: 'adai-default-secret-2024' kısmını Netlify ortam değişkenlerindeki ADAI_APP_SECRET ile aynı yapmalısınız.
+    const APP_SECRET = 'adai-default-secret-2024';
+    const PROXY_BASE_URL = 'https://adai.life'; // Alan adınız güncellendi
+
     const response = await fetch(`${PROXY_BASE_URL}/.netlify/functions/openai-proxy`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-Adai-Secret': APP_SECRET, // Güvenlik katmanı eklendi
         },
         body: JSON.stringify({ path, body }),
     });
